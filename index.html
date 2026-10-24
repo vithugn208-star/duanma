@@ -524,8 +524,8 @@
 
     <!-- CORE APP LOGIC WITH FIREBASE -->
     <script>
-        const ADMIN_USERNAME = "admin"; // Đã đồng bộ với Firestore ID "admin"
-        const ADMIN_PASSWORD = "@Minhanh><vh";
+        const ADMIN_USERNAME = "admin@vhung.com"; // Khớp chính xác với Document ID trên Firebase
+        const ADMIN_PASSWORD = "@Minhanh208";
         let authMode = 'login';
         let currentTab = 'shop';
         let pendingAction = null;
@@ -700,28 +700,21 @@
         async function handleAuthSubmit() {
             const u = document.getElementById('authUsername').value.trim();
             const p = document.getElementById('authPassword').value.trim();
-            const reP = document.getElementById('authRetypePassword').value.trim();
             const cap = parseInt(document.getElementById('authCaptcha').value);
 
             if (!u || !p) return alert("Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!");
             if (cap !== captchaAns) return alert("Mã Captcha tính toán không chính xác!");
 
-            const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
-
-            // Xử lý riêng cho tài khoản Admin dcmdoi để chống lỗi bất đồng bộ cloud
+            // ĐĂNG NHẬP ADMIN KHỚP VỚI FIREBASE
             if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
                 if (p !== ADMIN_PASSWORD) return alert("Mật khẩu Admin không chính xác!");
-                
-                // Đảm bảo ép tạo luôn trên Firestore ngay lập tức
-                userDatabase[ADMIN_USERNAME] = userDatabase[ADMIN_USERNAME] || { password: ADMIN_PASSWORD, realFullName: 'Vũ Đặng Việt Hùng', phone: '0988888888', balance: 50000, isBanned: false, regTime: '01/10/2026', purchases: [], deposits: [] };
-                await window.FB.setDoc(window.FB.doc(window.db, "users", ADMIN_USERNAME), userDatabase[ADMIN_USERNAME], { merge: true });
 
                 currentUser = {
                     username: ADMIN_USERNAME,
                     fullName: ADMIN_USERNAME,
-                    realFullName: userDatabase[ADMIN_USERNAME].realFullName,
-                    phone: userDatabase[ADMIN_USERNAME].phone,
-                    balance: userDatabase[ADMIN_USERNAME].balance,
+                    realFullName: 'Vũ Đặng Việt Hùng',
+                    phone: '',
+                    balance: 0,
                     isAdmin: true,
                     isBanned: false
                 };
@@ -734,8 +727,10 @@
                 return;
             }
 
-            // Logic đăng nhập / đăng ký bình thường cho khách
+            // Xử lý đăng nhập / đăng ký bình thường cho khách
+            const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
             if (authMode === 'register') {
+                const reP = document.getElementById('authRetypePassword').value.trim();
                 if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
                 if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại!");
                 userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
