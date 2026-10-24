@@ -506,14 +506,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const TELE_BOT_TOKEN = "8622803027:AAHp7cN0-NBUGpdtKzWtxkl4D3wXEwVr79k";
-        const ADMIN_TELE_CHAT_ID = "688888888"; // Cậu có thể thay ID chat Telegram của cậu vào đây để nhận thông báo
+        const ADMIN_TELE_CHAT_ID = "688888888";
 
         window.db = db;
         window.colProducts = collection(db, "products");
         window.colUsers = collection(db, "users");
         window.FB = { getDoc, setDoc, updateDoc, deleteDoc, getDocs, doc, onSnapshot };
 
-        // Gửi thông báo về Telegram Bot
         window.sendTeleNotif = function(text) {
             const url = `https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendMessage?chat_id=${ADMIN_TELE_CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
             fetch(url).catch(e => console.log(e));
@@ -524,7 +523,7 @@
 
     <!-- CORE APP LOGIC WITH FIREBASE -->
     <script>
-        const ADMIN_USERNAME = "admin@vhung.com"; // Khớp chính xác với Document ID trên Firebase
+        const ADMIN_USERNAME = "admin@vhung.com";
         const ADMIN_PASSWORD = "@Minhanh208";
         let authMode = 'login';
         let currentTab = 'shop';
@@ -540,6 +539,20 @@
         window.addEventListener('firebase-ready', async () => {
             lucide.createIcons();
             generateCaptcha();
+
+            // Khôi phục ngay lập tức phiên đăng nhập từ localStorage để chống lỗi F5 bị mất
+            let savedU = localStorage.getItem('vh_logged_in');
+            if (savedU && savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
+                currentUser = {
+                    username: ADMIN_USERNAME,
+                    fullName: ADMIN_USERNAME,
+                    realFullName: 'Vũ Đặng Việt Hùng',
+                    phone: '',
+                    balance: 0,
+                    isAdmin: true,
+                    isBanned: false
+                };
+            }
 
             // Realtime lắng nghe sản phẩm từ Firebase Firestore
             window.FB.onSnapshot(window.colProducts, (snapshot) => {
@@ -561,61 +574,33 @@
                     userDatabase[docSnap.id] = docSnap.data();
                 });
 
-                // Kiểm tra tài khoản admin mặc định khớp với tài liệu Firestore "admin"
-                if(!userDatabase[ADMIN_USERNAME]) {
-                    userDatabase[ADMIN_USERNAME] = { 
-                        password: ADMIN_PASSWORD, 
-                        realFullName: 'Vũ Đặng Việt Hùng', 
-                        phone: '0988888888', 
-                        balance: 50000, 
-                        role: 'admin',
-                        isBanned: false, 
-                        regTime: '01/10/2026', 
-                        purchases: [], 
-                        deposits: [] 
-                    };
-                    window.FB.setDoc(window.FB.doc(window.db, "users", ADMIN_USERNAME), userDatabase[ADMIN_USERNAME]);
-                }
-
-                // Check Telegram WebApp user
-                if (window.Telegram && window.Telegram.WebApp) {
-                    const tg = window.Telegram.WebApp;
-                    tg.ready();
-                    tg.expand();
-                    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                        const u = tg.initDataUnsafe.user;
-                        let uname = u.username || u.first_name;
-                        if (!userDatabase[uname]) {
-                            const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
-                            userDatabase[uname] = { password: '123', realFullName: '', phone: '', balance: 0, role: 'user', isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
-                            window.FB.setDoc(window.FB.doc(window.db, "users", uname), userDatabase[uname]);
-                        }
+                // Nếu đang lưu phiên đăng nhập, đồng bộ lại dữ liệu user chuẩn xác
+                let currentSavedU = localStorage.getItem('vh_logged_in');
+                if (currentSavedU) {
+                    if (currentSavedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
                         currentUser = {
-                            username: uname,
-                            fullName: u.first_name + (u.last_name ? ' ' + u.last_name : ''),
-                            realFullName: userDatabase[uname].realFullName || '',
-                            phone: userDatabase[uname].phone || '',
-                            balance: userDatabase[uname].balance,
-                            isAdmin: (uname.toLowerCase() === ADMIN_USERNAME.toLowerCase()) || (userDatabase[uname] && userDatabase[uname].role === 'admin'),
-                            isBanned: userDatabase[uname].isBanned
+                            username: ADMIN_USERNAME,
+                            fullName: ADMIN_USERNAME,
+                            realFullName: 'Vũ Đặng Việt Hùng',
+                            phone: '',
+                            balance: 0,
+                            isAdmin: true,
+                            isBanned: false
                         };
-                    }
-                } else {
-                    // Khôi phục từ localStorage phiên đăng nhập
-                    let savedU = localStorage.getItem('vh_logged_in');
-                    if(savedU && userDatabase[savedU]) {
-                        let found = userDatabase[savedU];
+                    } else if (userDatabase[currentSavedU]) {
+                        let found = userDatabase[currentSavedU];
                         currentUser = {
-                            username: savedU,
-                            fullName: savedU,
+                            username: currentSavedU,
+                            fullName: currentSavedU,
                             realFullName: found.realFullName || '',
                             phone: found.phone || '',
-                            balance: found.balance,
-                            isAdmin: (savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) || (found && found.role === 'admin'),
-                            isBanned: found.isBanned
+                            balance: found.balance || 0,
+                            isAdmin: false,
+                            isBanned: found.isBanned || false
                         };
                     }
                 }
+
                 updateUserHeader();
                 renderUserHistory();
             });
@@ -705,7 +690,7 @@
             if (!u || !p) return alert("Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!");
             if (cap !== captchaAns) return alert("Mã Captcha tính toán không chính xác!");
 
-            // ĐĂNG NHẬP ADMIN KHỚP VỚI FIREBASE
+            // ĐĂNG NHẬP ADMIN
             if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
                 if (p !== ADMIN_PASSWORD) return alert("Mật khẩu Admin không chính xác!");
 
@@ -727,7 +712,7 @@
                 return;
             }
 
-            // Xử lý đăng nhập / đăng ký bình thường cho khách
+            // Xử lý đăng nhập / đăng ký cho khách
             const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
             if (authMode === 'register') {
                 const reP = document.getElementById('authRetypePassword').value.trim();
@@ -918,7 +903,6 @@
             userDatabase[currentUser.username].purchases.unshift(newPurchase);
             userDatabase[currentUser.username].balance = currentUser.balance;
 
-            // Cập nhật Cloud Firebase
             await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), {
                 balance: currentUser.balance,
                 purchases: userDatabase[currentUser.username].purchases
@@ -1130,18 +1114,21 @@
             const name = document.getElementById('newCatName').value.trim();
             const price = parseInt(document.getElementById('newCatPrice').value) || 0;
             const desc = document.getElementById('newCatDesc').value.trim();
-            if(!name || price <= 0) return alert("Nhập đủ thông tin!");
+            if(!name || price <= 0) return alert("Vui lòng điền đầy đủ tên và đơn giá hợp lệ!");
 
             const newId = "cat_" + Date.now();
             const newCat = { id: newId, name: name, desc: desc || 'Sạch 100%', price: price, stock: 0, sold: 0, rawAccs: [] };
             await window.FB.setDoc(window.FB.doc(window.db, "products", newId), newCat);
-            alert("✅ Đã tạo gian hàng lên Cloud!");
+            document.getElementById('newCatName').value = '';
+            document.getElementById('newCatPrice').value = '';
+            document.getElementById('newCatDesc').value = '';
+            alert("✅ Đã tạo gian hàng mới lên Cloud thành công!");
         }
 
         async function adminDeleteCategory(catId) {
-            if(confirm("Xóa gian hàng này?")) {
+            if(confirm("Bạn có chắc chắn muốn xóa gian hàng này?")) {
                 await window.FB.deleteDoc(window.FB.doc(window.db, "products", catId));
-                alert("🗑️ Đã xóa!");
+                alert("🗑️ Đã xóa gian hàng!");
             }
         }
 
@@ -1166,15 +1153,15 @@
             let u = userDatabase[uname];
             u.isBanned = !u.isBanned;
             await window.FB.updateDoc(window.FB.doc(window.db, "users", uname), { isBanned: u.isBanned });
-            alert("Đã cập nhật trạng thái!");
+            alert("Đã cập nhật trạng thái tài khoản!");
         }
 
         async function adminAddStock() {
             const catId = document.getElementById('adminSelectCategory').value;
             const text = document.getElementById('adminAccInput').value.trim();
-            if(!text) return alert("Chưa nhập acc!");
+            if(!text) return alert("Vui lòng dán danh sách acc cần nạp!");
             const p = products.find(x => x.id === catId);
-            if(!p) return;
+            if(!p) return alert("Vui lòng chọn gian hàng hợp lệ!");
 
             const lines = text.split('\n').filter(l => l.trim());
             if(!p.rawAccs) p.rawAccs = [];
@@ -1189,10 +1176,10 @@
         async function adminAdjustBalance() {
             const target = document.getElementById('adminTargetUser').value.trim();
             const amt = parseInt(document.getElementById('adminAmount').value) || 0;
-            if(!userDatabase[target]) return alert("Không tìm thấy khách!");
+            if(!userDatabase[target]) return alert("Không tìm thấy tên đăng nhập của khách!");
             userDatabase[target].balance += amt;
             await window.FB.updateDoc(window.FB.doc(window.db, "users", target), { balance: userDatabase[target].balance });
-            alert("✅ Đã cập nhật ví!");
+            alert("✅ Đã cập nhật số dư ví thành công!");
         }
 
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
