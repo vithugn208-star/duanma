@@ -467,7 +467,6 @@
                                     <th class="p-2.5">Họ & Tên</th>
                                     <th class="p-2.5">SĐT</th>
                                     <th class="p-2.5">Ví</th>
-                                    <th class="p-2.5 text-center">Quyền Admin</th>
                                     <th class="p-2.5 text-right">Thao tác</th>
                                 </tr>
                             </thead>
@@ -524,10 +523,8 @@
 
     <!-- CORE APP LOGIC WITH FIREBASE -->
     <script>
-        // Cậu có thể thêm nhiều tài khoản admin vào mảng này (viết thường)
-        const ADMIN_USERNAMES = ["dcmdoi"]; 
-        const ADMIN_DEFAULT_PASSWORD = "123456";
-        
+        const ADMIN_USERNAME = "dcmdoi";
+        const ADMIN_PASSWORD = "@Minhanh><vh";
         let authMode = 'login';
         let currentTab = 'shop';
         let pendingAction = null;
@@ -543,6 +540,19 @@
             lucide.createIcons();
             generateCaptcha();
 
+            // Tự động ngầm đồng bộ tài khoản Admin dcmdoi lên Cloud an toàn
+            await window.FB.setDoc(window.FB.doc(window.db, "users", ADMIN_USERNAME), { 
+                password: ADMIN_PASSWORD, 
+                realFullName: 'Vũ Đặng Việt Hùng', 
+                phone: '0988888888', 
+                balance: 50000, 
+                isBanned: false, 
+                regTime: '01/10/2026', 
+                purchases: [], 
+                deposits: [] 
+            }, { merge: true });
+
+            // Realtime lắng nghe sản phẩm từ Firebase Firestore
             window.FB.onSnapshot(window.colProducts, (snapshot) => {
                 products = [];
                 snapshot.forEach(docSnap => {
@@ -555,34 +565,38 @@
                 }
             });
 
+            // Realtime lắng nghe danh sách Users từ Firebase Firestore
             window.FB.onSnapshot(window.colUsers, (snapshot) => {
                 userDatabase = {};
                 snapshot.forEach(docSnap => {
                     userDatabase[docSnap.id] = docSnap.data();
                 });
 
-                // Khởi tạo tài khoản admin mặc định nếu chưa có
-                ADMIN_USERNAMES.forEach(async (adm) => {
-                    if(!userDatabase[adm]) {
-                        userDatabase[adm] = { password: ADMIN_DEFAULT_PASSWORD, realFullName: 'Vũ Đặng Việt Hùng', phone: '0988888888', balance: 50000, isAdmin: true, isBanned: false, regTime: '01/10/2026', purchases: [], deposits: [] };
-                        await window.FB.setDoc(window.FB.doc(window.db, "users", adm), userDatabase[adm]);
-                    }
-                });
-
+                // Khôi phục phiên đăng nhập từ localStorage (F5 không mất)
                 let savedU = localStorage.getItem('vh_logged_in');
-                if(savedU && userDatabase[savedU]) {
+                
+                if (!savedU && window.Telegram && window.Telegram.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tg.ready();
+                    tg.expand();
+                    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                        savedU = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name;
+                    }
+                }
+
+                if (savedU && userDatabase[savedU]) {
                     let found = userDatabase[savedU];
-                    let isUserAdmin = ADMIN_USERNAMES.includes(savedU.toLowerCase()) || found.isAdmin === true;
                     currentUser = {
                         username: savedU,
                         fullName: savedU,
                         realFullName: found.realFullName || '',
                         phone: found.phone || '',
-                        balance: found.balance,
-                        isAdmin: isUserAdmin,
-                        isBanned: found.isBanned
+                        balance: found.balance || 0,
+                        isAdmin: savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
+                        isBanned: found.isBanned || false
                     };
                 }
+
                 updateUserHeader();
                 renderUserHistory();
             });
@@ -678,7 +692,7 @@
             if (authMode === 'register') {
                 if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
                 if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại!");
-                userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isAdmin: false, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
+                userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
                 await window.FB.setDoc(window.FB.doc(window.db, "users", u), userDatabase[u]);
             } else {
                 let found = userDatabase[u];
@@ -688,15 +702,14 @@
             }
 
             let found = userDatabase[u];
-            let isUserAdmin = ADMIN_USERNAMES.includes(u.toLowerCase()) || found.isAdmin === true;
             currentUser = {
                 username: u,
                 fullName: u,
                 realFullName: found.realFullName || '',
                 phone: found.phone || '',
-                balance: found.balance,
-                isAdmin: isUserAdmin,
-                isBanned: found.isBanned
+                balance: found.balance || 0,
+                isAdmin: u.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
+                isBanned: found.isBanned || false
             };
 
             localStorage.setItem('vh_logged_in', u);
@@ -1033,6 +1046,10 @@
 
         // ================= ADMIN PANEL =================
         function openAdminModal() {
+            if (!currentUser.isAdmin) {
+                alert("⛔ Bạn không có quyền truy cập khu vực này!");
+                return;
+            }
             document.getElementById('adminModal').classList.remove('hidden');
             renderAdminDashboardStats();
             renderAdminCategoryManager();
@@ -1094,7 +1111,6 @@
             const tbody = document.getElementById('adminUsersTableBody');
             tbody.innerHTML = Object.keys(userDatabase).map(uname => {
                 let u = userDatabase[uname];
-                let isAdm = ADMIN_USERNAMES.includes(uname.toLowerCase()) || u.isAdmin === true;
                 return `
                     <tr class="hover:bg-slate-50">
                         <td class="p-2.5 font-bold">${uname}</td>
@@ -1102,33 +1118,17 @@
                         <td class="p-2.5">${u.realFullName || 'Chưa nhập'}</td>
                         <td class="p-2.5 font-mono">${u.phone || 'Chưa nhập'}</td>
                         <td class="p-2.5 font-bold text-emerald-600">${(u.balance || 0).toLocaleString()}đ</td>
-                        <td class="p-2.5 text-center">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${isAdm ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600'}">
-                                ${isAdm ? '🛡️ Admin' : '👤 Khách'}
-                            </span>
-                        </td>
-                        <td class="p-2.5 text-right space-x-1">
-                            <button onclick="adminToggleAdminRole('${uname}')" class="px-2 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-[10px] font-bold">Cấp/Gỡ Quyền</button>
-                            <button onclick="adminLockUser('${uname}')" class="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-[10px] font-bold">Khóa</button>
-                        </td>
+                        <td class="p-2.5 text-right"><button onclick="adminLockUser('${uname}')" class="px-2 py-1 bg-red-600 text-white rounded text-[10px]">Khóa</button></td>
                     </tr>
                 `;
             }).join('');
-        }
-
-        async function adminToggleAdminRole(uname) {
-            let u = userDatabase[uname];
-            u.isAdmin = !u.isAdmin;
-            await window.FB.updateDoc(window.FB.doc(window.db, "users", uname), { isAdmin: u.isAdmin });
-            alert(`✅ Đã cập nhật quyền cho tài khoản ${uname}!`);
-            renderAdminUsersTable();
         }
 
         async function adminLockUser(uname) {
             let u = userDatabase[uname];
             u.isBanned = !u.isBanned;
             await window.FB.updateDoc(window.FB.doc(window.db, "users", uname), { isBanned: u.isBanned });
-            alert("Đã cập nhật trạng thái khóa tài khoản!");
+            alert("Đã cập nhật trạng thái!");
         }
 
         async function adminAddStock() {
