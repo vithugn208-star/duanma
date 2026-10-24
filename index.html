@@ -708,10 +708,37 @@
 
             const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
 
+            // Xử lý riêng cho tài khoản Admin dcmdoi để chống lỗi bất đồng bộ cloud
+            if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
+                if (p !== ADMIN_PASSWORD) return alert("Mật khẩu Admin không chính xác!");
+                
+                // Đảm bảo ép tạo luôn trên Firestore ngay lập tức
+                userDatabase[ADMIN_USERNAME] = userDatabase[ADMIN_USERNAME] || { password: ADMIN_PASSWORD, realFullName: 'Vũ Đặng Việt Hùng', phone: '0988888888', balance: 50000, isBanned: false, regTime: '01/10/2026', purchases: [], deposits: [] };
+                await window.FB.setDoc(window.FB.doc(window.db, "users", ADMIN_USERNAME), userDatabase[ADMIN_USERNAME], { merge: true });
+
+                currentUser = {
+                    username: ADMIN_USERNAME,
+                    fullName: ADMIN_USERNAME,
+                    realFullName: userDatabase[ADMIN_USERNAME].realFullName,
+                    phone: userDatabase[ADMIN_USERNAME].phone,
+                    balance: userDatabase[ADMIN_USERNAME].balance,
+                    isAdmin: true,
+                    isBanned: false
+                };
+
+                localStorage.setItem('vh_logged_in', ADMIN_USERNAME);
+                updateUserHeader();
+                renderUserHistory();
+                closeModal('authModal');
+                alert(`🚀 Chào sếp Hùng! Đăng nhập quyền Admin thành công.`);
+                return;
+            }
+
+            // Logic đăng nhập / đăng ký bình thường cho khách
             if (authMode === 'register') {
                 if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
                 if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại!");
-                userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, role: 'user', isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
+                userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
                 await window.FB.setDoc(window.FB.doc(window.db, "users", u), userDatabase[u]);
             } else {
                 let found = userDatabase[u];
@@ -726,9 +753,9 @@
                 fullName: u,
                 realFullName: found.realFullName || '',
                 phone: found.phone || '',
-                balance: found.balance,
-                isAdmin: (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) || (found && found.role === 'admin'),
-                isBanned: found.isBanned
+                balance: found.balance || 0,
+                isAdmin: false,
+                isBanned: found.isBanned || false
             };
 
             localStorage.setItem('vh_logged_in', u);
