@@ -506,13 +506,14 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const TELE_BOT_TOKEN = "8622803027:AAHp7cN0-NBUGpdtKzWtxkl4D3wXEwVr79k";
-        const ADMIN_TELE_CHAT_ID = "688888888";
+        const ADMIN_TELE_CHAT_ID = "688888888"; // Cậu có thể thay ID chat Telegram của cậu vào đây để nhận thông báo
 
         window.db = db;
         window.colProducts = collection(db, "products");
         window.colUsers = collection(db, "users");
         window.FB = { getDoc, setDoc, updateDoc, deleteDoc, getDocs, doc, onSnapshot };
 
+        // Gửi thông báo về Telegram Bot
         window.sendTeleNotif = function(text) {
             const url = `https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendMessage?chat_id=${ADMIN_TELE_CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
             fetch(url).catch(e => console.log(e));
@@ -523,7 +524,7 @@
 
     <!-- CORE APP LOGIC WITH FIREBASE -->
     <script>
-        const ADMIN_USERNAME = "dcmdoi";
+        const ADMIN_USERNAME = "admin"; // Đã đồng bộ với Firestore ID "admin"
         const ADMIN_PASSWORD = "@Minhanh><vh";
         let authMode = 'login';
         let currentTab = 'shop';
@@ -539,18 +540,6 @@
         window.addEventListener('firebase-ready', async () => {
             lucide.createIcons();
             generateCaptcha();
-
-            // Tự động ngầm đồng bộ tài khoản Admin dcmdoi lên Cloud an toàn
-            await window.FB.setDoc(window.FB.doc(window.db, "users", ADMIN_USERNAME), { 
-                password: ADMIN_PASSWORD, 
-                realFullName: 'Vũ Đặng Việt Hùng', 
-                phone: '0988888888', 
-                balance: 50000, 
-                isBanned: false, 
-                regTime: '01/10/2026', 
-                purchases: [], 
-                deposits: [] 
-            }, { merge: true });
 
             // Realtime lắng nghe sản phẩm từ Firebase Firestore
             window.FB.onSnapshot(window.colProducts, (snapshot) => {
@@ -572,31 +561,61 @@
                     userDatabase[docSnap.id] = docSnap.data();
                 });
 
-                // Khôi phục phiên đăng nhập từ localStorage (F5 không mất)
-                let savedU = localStorage.getItem('vh_logged_in');
-                
-                if (!savedU && window.Telegram && window.Telegram.WebApp) {
+                // Kiểm tra tài khoản admin mặc định khớp với tài liệu Firestore "admin"
+                if(!userDatabase[ADMIN_USERNAME]) {
+                    userDatabase[ADMIN_USERNAME] = { 
+                        password: ADMIN_PASSWORD, 
+                        realFullName: 'Vũ Đặng Việt Hùng', 
+                        phone: '0988888888', 
+                        balance: 50000, 
+                        role: 'admin',
+                        isBanned: false, 
+                        regTime: '01/10/2026', 
+                        purchases: [], 
+                        deposits: [] 
+                    };
+                    window.FB.setDoc(window.FB.doc(window.db, "users", ADMIN_USERNAME), userDatabase[ADMIN_USERNAME]);
+                }
+
+                // Check Telegram WebApp user
+                if (window.Telegram && window.Telegram.WebApp) {
                     const tg = window.Telegram.WebApp;
                     tg.ready();
                     tg.expand();
                     if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                        savedU = tg.initDataUnsafe.user.username || tg.initDataUnsafe.user.first_name;
+                        const u = tg.initDataUnsafe.user;
+                        let uname = u.username || u.first_name;
+                        if (!userDatabase[uname]) {
+                            const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
+                            userDatabase[uname] = { password: '123', realFullName: '', phone: '', balance: 0, role: 'user', isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
+                            window.FB.setDoc(window.FB.doc(window.db, "users", uname), userDatabase[uname]);
+                        }
+                        currentUser = {
+                            username: uname,
+                            fullName: u.first_name + (u.last_name ? ' ' + u.last_name : ''),
+                            realFullName: userDatabase[uname].realFullName || '',
+                            phone: userDatabase[uname].phone || '',
+                            balance: userDatabase[uname].balance,
+                            isAdmin: (uname.toLowerCase() === ADMIN_USERNAME.toLowerCase()) || (userDatabase[uname] && userDatabase[uname].role === 'admin'),
+                            isBanned: userDatabase[uname].isBanned
+                        };
+                    }
+                } else {
+                    // Khôi phục từ localStorage phiên đăng nhập
+                    let savedU = localStorage.getItem('vh_logged_in');
+                    if(savedU && userDatabase[savedU]) {
+                        let found = userDatabase[savedU];
+                        currentUser = {
+                            username: savedU,
+                            fullName: savedU,
+                            realFullName: found.realFullName || '',
+                            phone: found.phone || '',
+                            balance: found.balance,
+                            isAdmin: (savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) || (found && found.role === 'admin'),
+                            isBanned: found.isBanned
+                        };
                     }
                 }
-
-                if (savedU && userDatabase[savedU]) {
-                    let found = userDatabase[savedU];
-                    currentUser = {
-                        username: savedU,
-                        fullName: savedU,
-                        realFullName: found.realFullName || '',
-                        phone: found.phone || '',
-                        balance: found.balance || 0,
-                        isAdmin: savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
-                        isBanned: found.isBanned || false
-                    };
-                }
-
                 updateUserHeader();
                 renderUserHistory();
             });
@@ -692,7 +711,7 @@
             if (authMode === 'register') {
                 if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
                 if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại!");
-                userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
+                userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, role: 'user', isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
                 await window.FB.setDoc(window.FB.doc(window.db, "users", u), userDatabase[u]);
             } else {
                 let found = userDatabase[u];
@@ -707,9 +726,9 @@
                 fullName: u,
                 realFullName: found.realFullName || '',
                 phone: found.phone || '',
-                balance: found.balance || 0,
-                isAdmin: u.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
-                isBanned: found.isBanned || false
+                balance: found.balance,
+                isAdmin: (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) || (found && found.role === 'admin'),
+                isBanned: found.isBanned
             };
 
             localStorage.setItem('vh_logged_in', u);
@@ -877,6 +896,7 @@
             userDatabase[currentUser.username].purchases.unshift(newPurchase);
             userDatabase[currentUser.username].balance = currentUser.balance;
 
+            // Cập nhật Cloud Firebase
             await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), {
                 balance: currentUser.balance,
                 purchases: userDatabase[currentUser.username].purchases
@@ -1046,10 +1066,6 @@
 
         // ================= ADMIN PANEL =================
         function openAdminModal() {
-            if (!currentUser.isAdmin) {
-                alert("⛔ Bạn không có quyền truy cập khu vực này!");
-                return;
-            }
             document.getElementById('adminModal').classList.remove('hidden');
             renderAdminDashboardStats();
             renderAdminCategoryManager();
