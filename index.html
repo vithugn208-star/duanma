@@ -59,7 +59,7 @@
                 <div class="flex items-center gap-2">
                     <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
                         <div class="text-left">
-                            <p id="txtUsername" class="text-[11px] font-bold text-slate-700 truncate max-w-[90px] sm:max-w-none">Chưa Đăng Nhập</p>
+                            <p id="txtUsername" class="text-[11px] font-bold text-slate-700 truncate max-w-[90px] sm:max-w-none">Khách Vãng Lai</p>
                             <p class="text-[11px] text-emerald-600 font-extrabold">
                                 Ví: <span id="txtBalance">0</span>đ
                             </p>
@@ -114,7 +114,7 @@
             </div>
             <div class="text-[11px] sm:text-xs text-blue-900 leading-relaxed">
                 <p class="font-bold text-xs sm:text-sm text-blue-900 mb-0.5">🔥 Cổng Bán Acc Via & Clone Tự Động VhungFB</p>
-                <p>• Đăng nhập nhanh bằng chính **Telegram ID** của sếp.</p>
+                <p>• Nạp tiền tự động qua Bot Telegram (Nhập Telegram ID khi nạp thay cho tên/SĐT cũ).</p>
                 <p>• 🔒 <b>Lưu ý:</b> Lịch sử đơn mua tự động xóa sau <b>3 ngày (72 giờ)</b>. Tải file về ngay sau khi mua!</p>
             </div>
         </div>
@@ -139,7 +139,7 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-base sm:text-lg text-slate-800 mb-1">Nạp Tiền Tự Động Qua Telegram Bot</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">Dùng Telegram ID để nạp tiền tự động siêu tốc qua PayOS.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Mở bot, nhập Telegram ID của sếp để hệ thống tự động nhận diện và cộng tiền chuẩn xác.</p>
                 </div>
                 <a href="https://t.me/naptienvhfb_bot" target="_blank" class="inline-flex items-center justify-center gap-2 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
                     <i data-lucide="external-link" class="w-4 h-4"></i> Mở Bot Telegram Nạp Tiền Ngay
@@ -172,7 +172,7 @@
                             </tr>
                         </thead>
                         <tbody id="historyTableBody" class="divide-y divide-slate-100">
-                            <tr><td colspan="6" class="p-5 text-center text-slate-400">Vui lòng đăng nhập bằng Telegram ID để xem lịch sử.</td></tr>
+                            <tr><td colspan="6" class="p-5 text-center text-slate-400">Vui lòng đăng nhập để xem lịch sử mua hàng.</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -191,6 +191,27 @@
     </footer>
 
     <!-- ================= MODALS SECTION ================= -->
+
+    <!-- MODAL LIÊN KẾT TELEGRAM ID THAY CHO TÊN & SĐT KHI NẠP TIỀN -->
+    <div id="profileUpdateModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-5 border border-slate-100 text-center">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                <i data-lucide="bot" class="w-6 h-6"></i>
+            </div>
+            <h3 class="font-bold text-base text-slate-800 mb-1">Nhập Telegram ID Nạp Tiền</h3>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Vui lòng nhập Telegram ID của sếp để hệ thống bot nhận diện và cộng tiền chính xác vào tài khoản này.</p>
+            
+            <div class="space-y-3 text-left">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Telegram ID:</label>
+                    <input type="text" id="inputTelegramId" placeholder="Ví dụ: 6965340589" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 font-mono">
+                </div>
+                <button onclick="saveTelegramIdInfo()" class="w-full mt-2 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                    Lưu Telegram ID & Tiếp Tục
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL XEM ACC -->
     <div id="viewAccModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -279,27 +300,44 @@
             </div>
             <div class="space-y-2 text-xs text-slate-600 leading-relaxed">
                 <p><b>1. Quy định chung:</b> Tài khoản Via và Clone bán ra đều được check live 100% trước khi gửi.</p>
-                <p><b>2. Thời gian lưu trữ dữ liệu (Bảo mật 3 ngày):</b> Hệ thống tự động xóa file thông tin acc khỏi lịch sử sau <b>3 ngày (72 giờ)</b>.</p>
+                <p><b>2. Thời gian lưu trữ dữ liệu:</b> Tự động xóa file thông tin acc khỏi lịch sử sau <b>3 ngày (72 giờ)</b>.</p>
             </div>
             <button onclick="closeModal('termsModal')" class="w-full mt-4 py-2.5 bg-blue-600 text-white font-bold text-xs rounded-xl">Đã Hiểu & Đồng Ý</button>
         </div>
     </div>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ BẰNG TELEGRAM ID -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ MẬT KHẨU -->
     <div id="authModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-5 border border-slate-100">
             <div class="flex justify-between items-center mb-3">
                 <div class="flex gap-4 border-b border-slate-200">
-                    <button id="tabLogin" onclick="switchAuthTab('login')" class="pb-2 text-xs sm:text-sm font-bold text-blue-600 border-b-2 border-blue-600">Đăng Nhập Telegram ID</button>
+                    <button id="tabLogin" onclick="switchAuthTab('login')" class="pb-2 text-xs sm:text-sm font-bold text-blue-600 border-b-2 border-blue-600">Đăng Nhập</button>
+                    <button id="tabRegister" onclick="switchAuthTab('register')" class="pb-2 text-xs sm:text-sm font-bold text-slate-400">Đăng Ký</button>
                 </div>
                 <button onclick="closeModal('authModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             <div class="space-y-3">
-                <div>
-                    <label class="block text-[11px] font-bold text-slate-600 mb-1">Nhập Telegram ID của sếp:</label>
-                    <input type="text" id="authTeleId" placeholder="Ví dụ: 6965340589" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500 font-mono">
+                <input type="text" id="authUsername" placeholder="Tên đăng nhập" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                
+                <div class="relative">
+                    <input type="password" id="authPassword" placeholder="Mật khẩu" class="w-full px-3.5 py-2.5 pr-10 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="button" onclick="togglePasswordVisibility('authPassword', 'eyeIcon1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" id="eyeIcon1" class="w-4 h-4"></i>
+                    </button>
                 </div>
-                <button id="btnAuthSubmit" onclick="handleAuthSubmit()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">Đăng Nhập / Tạo Ví Nhanh</button>
+
+                <div id="retypePasswordContainer" class="hidden relative">
+                    <input type="password" id="authRetypePassword" placeholder="Nhập lại mật khẩu" class="w-full px-3.5 py-2.5 pr-10 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                    <button type="button" onclick="togglePasswordVisibility('authRetypePassword', 'eyeIcon2')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                        <i data-lucide="eye" id="eyeIcon2" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+                    <span id="captchaQuestion" class="text-xs font-bold text-slate-700">5 + 3 = ?</span>
+                    <input type="number" id="authCaptcha" placeholder="Kết quả" class="w-24 px-2 py-1.5 border rounded-lg text-xs font-bold text-center">
+                </div>
+                <button id="btnAuthSubmit" onclick="handleAuthSubmit()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">Xác Nhận Đăng Nhập</button>
             </div>
         </div>
     </div>
@@ -373,8 +411,10 @@
                         <table class="w-full text-left text-xs bg-white rounded-lg border">
                             <thead class="bg-slate-100 font-bold border-b sticky top-0">
                                 <tr>
+                                    <th class="p-2">Username</th>
+                                    <th class="p-2 text-red-600">Pass</th>
                                     <th class="p-2">Telegram ID</th>
-                                    <th class="p-2">Số dư Ví</th>
+                                    <th class="p-2">Ví</th>
                                     <th class="p-2 text-right">Thao tác</th>
                                 </tr>
                             </thead>
@@ -387,7 +427,7 @@
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
                     <h4 class="font-bold text-xs text-slate-700 mb-2">💰 Cộng / Trừ Số Dư Ví Khách Hàng</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <input type="text" id="adminTargetUser" placeholder="Telegram ID khách" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white font-mono">
+                        <input type="text" id="adminTargetUser" placeholder="Username khách" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                         <input type="number" id="adminAmount" placeholder="Số tiền (+/-)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                         <button onclick="adminAdjustBalance()" class="bg-emerald-600 text-white font-bold text-xs rounded-lg py-2">Cập Nhật Ví</button>
                     </div>
@@ -431,25 +471,33 @@
 
     <!-- CORE APP LOGIC -->
     <script>
-        const ADMIN_TELE_ID = "6965340589";
+        const ADMIN_USERNAME = "admin@vhung.com";
+        const ADMIN_PASSWORD = "@Minhanh208";
+        let authMode = 'login';
         let currentTab = 'shop';
+        let pendingAction = null;
+
         let products = [];
         let userDatabase = {};
-        let currentUser = { teleId: '', balance: 0, isAdmin: false };
-        let selectedOrderForView = null;
+        let currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', telegramId: '', balance: 0, isAdmin: false, isBanned: false };
         let activeProduct = null;
+        let captchaAns = 8;
 
-        let savedTeleId = localStorage.getItem('vh_tele_id');
-        if (savedTeleId) {
+        let savedU = localStorage.getItem('vh_logged_in');
+        if (savedU && savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
             currentUser = {
-                teleId: savedTeleId,
+                username: ADMIN_USERNAME,
+                fullName: ADMIN_USERNAME,
+                telegramId: '6965340589',
                 balance: 0,
-                isAdmin: savedTeleId === ADMIN_TELE_ID
+                isAdmin: true,
+                isBanned: false
             };
         }
 
         window.addEventListener('firebase-ready', async () => {
             lucide.createIcons();
+            generateCaptcha();
 
             window.FB.onSnapshot(window.colProducts, (snapshot) => {
                 products = [];
@@ -469,19 +517,26 @@
                     userDatabase[docSnap.id] = docSnap.data();
                 });
 
-                let currentSavedId = localStorage.getItem('vh_tele_id');
-                if (currentSavedId) {
-                    if (userDatabase[currentSavedId]) {
+                let currentSavedU = localStorage.getItem('vh_logged_in');
+                if (currentSavedU) {
+                    if (currentSavedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
                         currentUser = {
-                            teleId: currentSavedId,
-                            balance: userDatabase[currentSavedId].balance || 0,
-                            isAdmin: currentSavedId === ADMIN_TELE_ID
-                        };
-                    } else {
-                        currentUser = {
-                            teleId: currentSavedId,
+                            username: ADMIN_USERNAME,
+                            fullName: ADMIN_USERNAME,
+                            telegramId: '6965340589',
                             balance: 0,
-                            isAdmin: currentSavedId === ADMIN_TELE_ID
+                            isAdmin: true,
+                            isBanned: false
+                        };
+                    } else if (userDatabase[currentSavedU]) {
+                        let found = userDatabase[currentSavedU];
+                        currentUser = {
+                            username: currentSavedU,
+                            fullName: currentSavedU,
+                            telegramId: found.telegramId || '',
+                            balance: found.balance || 0,
+                            isAdmin: false,
+                            isBanned: found.isBanned || false
                         };
                     }
                 }
@@ -527,60 +582,150 @@
             }
         }
 
-        function switchAuthTab(mode) {}
-        function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
+        function generateCaptcha() {
+            const n1 = Math.floor(Math.random() * 5) + 1;
+            const n2 = Math.floor(Math.random() * 5) + 1;
+            captchaAns = n1 + n2;
+            document.getElementById('captchaQuestion').textContent = `${n1} + ${n2} = ?`;
+        }
+
+        function switchAuthTab(mode) {
+            authMode = mode;
+            const tabL = document.getElementById('tabLogin');
+            const tabR = document.getElementById('tabRegister');
+            const btn = document.getElementById('btnAuthSubmit');
+            const retypeContainer = document.getElementById('retypePasswordContainer');
+
+            if (mode === 'login') {
+                tabL.className = "pb-2 text-xs sm:text-sm font-bold text-blue-600 border-b-2 border-blue-600";
+                tabR.className = "pb-2 text-xs sm:text-sm font-bold text-slate-400";
+                btn.textContent = "Xác Nhận Đăng Nhập";
+                retypeContainer.classList.add('hidden');
+            } else {
+                tabR.className = "pb-2 text-xs sm:text-sm font-bold text-blue-600 border-b-2 border-blue-600";
+                tabL.className = "pb-2 text-xs sm:text-sm font-bold text-slate-400";
+                btn.textContent = "Đăng Ký & Tự Động Đăng Nhập";
+                retypeContainer.classList.remove('hidden');
+            }
+        }
+
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                input.type = "password";
+                icon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        }
+
+        function openAuthModal() { generateCaptcha(); document.getElementById('authModal').classList.remove('hidden'); }
         function openTermsModal() { document.getElementById('termsModal').classList.remove('hidden'); }
 
         async function handleAuthSubmit() {
-            const teleId = document.getElementById('authTeleId').value.trim();
-            if (!teleId || !/^\d+$/.test(teleId)) return alert("Vui lòng nhập Telegram ID hợp lệ (chỉ gồm các chữ số)!");
+            const u = document.getElementById('authUsername').value.trim();
+            const p = document.getElementById('authPassword').value.trim();
+            const cap = parseInt(document.getElementById('authCaptcha').value);
 
-            if (!userDatabase[teleId]) {
-                userDatabase[teleId] = { 
+            if (!u || !p) return alert("Vui lòng nhập đầy đủ Tên đăng nhập và Mật khẩu!");
+            if (cap !== captchaAns) return alert("Mã Captcha tính toán không chính xác!");
+
+            if (u.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
+                if (p !== ADMIN_PASSWORD) return alert("Mật khẩu Admin không chính xác!");
+
+                currentUser = {
+                    username: ADMIN_USERNAME,
+                    fullName: ADMIN_USERNAME,
+                    telegramId: '6965340589',
+                    balance: 0,
+                    isAdmin: true,
+                    isBanned: false
+                };
+
+                localStorage.setItem('vh_logged_in', ADMIN_USERNAME);
+                updateUserHeader();
+                renderUserHistory();
+                closeModal('authModal');
+                alert(`🚀 Chào sếp Hùng! Đăng nhập quyền Admin thành công.`);
+                return;
+            }
+
+            const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
+            if (authMode === 'register') {
+                const reP = document.getElementById('authRetypePassword').value.trim();
+                if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
+                if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại trên hệ thống!");
+                
+                alert(`🎉 ĐĂNG KÝ THÀNH CÔNG!\nTài khoản [ ${u} ] đã được tạo.`);
+
+                userDatabase[u] = { 
+                    password: p, 
+                    telegramId: '', 
                     balance: 0, 
+                    isBanned: false, 
+                    regTime: nowStr, 
                     purchases: [], 
                     deposits: [] 
                 };
-                await window.FB.setDoc(window.FB.doc(window.db, "users", teleId), userDatabase[teleId]);
+
+                try {
+                    await window.FB.setDoc(window.FB.doc(window.db, "users", u), userDatabase[u]);
+                } catch (err) {
+                    console.error(err);
+                }
+
+            } else {
+                let found = userDatabase[u];
+                if (!found) return alert("Tài khoản không tồn tại!");
+                if (found.password !== p) return alert("Mật khẩu đăng nhập không chính xác!");
+                if (found.isBanned) return alert("Tài khoản này đã bị khóa truy cập!");
+                
+                alert(`✅ Đăng nhập thành công tài khoản: ${u}`);
             }
 
+            let foundData = userDatabase[u];
             currentUser = {
-                teleId: teleId,
-                balance: userDatabase[teleId].balance || 0,
-                isAdmin: teleId === ADMIN_TELE_ID
+                username: u,
+                fullName: u,
+                telegramId: foundData.telegramId || '',
+                balance: foundData.balance || 0,
+                isAdmin: false,
+                isBanned: foundData.isBanned || false
             };
 
-            localStorage.setItem('vh_tele_id', teleId);
+            localStorage.setItem('vh_logged_in', u);
             updateUserHeader();
             renderUserHistory();
             closeModal('authModal');
-            alert(`✅ Đăng nhập thành công với Telegram ID: ${teleId}`);
+            
+            // Nếu chưa nhập Telegram ID, bật modal yêu cầu nhập Telegram ID thay cho tên/sđt
+            if (!currentUser.telegramId) {
+                document.getElementById('inputTelegramId').value = '';
+                document.getElementById('profileUpdateModal').classList.remove('hidden');
+            }
         }
 
         function updateUserHeader() {
-            const usernameEl = document.getElementById('txtUsername');
-            const balanceEl = document.getElementById('txtBalance');
+            document.getElementById('txtUsername').textContent = currentUser.fullName;
+            document.getElementById('txtBalance').textContent = currentUser.balance.toLocaleString();
             const btnAuth = document.getElementById('btnAuthTrigger');
-
-            if (currentUser.teleId) {
-                usernameEl.textContent = `ID: ${currentUser.teleId}`;
-                balanceEl.textContent = currentUser.balance.toLocaleString();
+            if (currentUser.username !== 'khachhang') {
                 btnAuth.textContent = "Đăng Xuất";
                 btnAuth.onclick = () => {
-                    localStorage.removeItem('vh_tele_id');
-                    currentUser = { teleId: '', balance: 0, isAdmin: false };
+                    localStorage.removeItem('vh_logged_in');
+                    currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', telegramId: '', balance: 0, isAdmin: false, isBanned: false };
                     updateUserHeader();
                     renderUserHistory();
                     btnAuth.textContent = "Đăng Nhập";
                     btnAuth.onclick = openAuthModal;
                 };
             } else {
-                usernameEl.textContent = "Chưa Đăng Nhập";
-                balanceEl.textContent = "0";
                 btnAuth.textContent = "Đăng Nhập";
                 btnAuth.onclick = openAuthModal;
             }
-
             if (currentUser.isAdmin) {
                 document.getElementById('btnAdminPanel').classList.remove('hidden');
             } else {
@@ -589,12 +734,38 @@
         }
 
         function checkProfileRequired(actionCallback) {
-            if (!currentUser.teleId) {
-                alert("⚠️ Vui lòng đăng nhập bằng Telegram ID để tiếp tục mua hàng!");
+            if (currentUser.username === 'khachhang') {
+                alert("⚠️ Bạn cần ĐĂNG NHẬP hoặc TẠO TÀI KHOẢN để mua hàng!");
                 openAuthModal();
                 return false;
             }
+            if (!currentUser.telegramId) {
+                pendingAction = actionCallback;
+                document.getElementById('inputTelegramId').value = '';
+                document.getElementById('profileUpdateModal').classList.remove('hidden');
+                return false;
+            }
             return true;
+        }
+
+        async function saveTelegramIdInfo() {
+            const teleId = document.getElementById('inputTelegramId').value.trim();
+            if (!teleId || !/^\d+$/.test(teleId)) return alert("Vui lòng nhập Telegram ID hợp lệ (chỉ gồm các chữ số)!");
+
+            currentUser.telegramId = teleId;
+
+            if (userDatabase[currentUser.username]) {
+                userDatabase[currentUser.username].telegramId = teleId;
+                await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), { telegramId: teleId });
+            }
+
+            closeModal('profileUpdateModal');
+            alert("✅ Đã liên kết Telegram ID thành công!");
+            if (pendingAction) {
+                let act = pendingAction;
+                pendingAction = null;
+                act();
+            }
         }
 
         function renderProducts() {
@@ -687,13 +858,13 @@
                 rawAccData: accData
             };
 
-            if(!userDatabase[currentUser.teleId].purchases) userDatabase[currentUser.teleId].purchases = [];
-            userDatabase[currentUser.teleId].purchases.unshift(newPurchase);
-            userDatabase[currentUser.teleId].balance = currentUser.balance;
+            if(!userDatabase[currentUser.username].purchases) userDatabase[currentUser.username].purchases = [];
+            userDatabase[currentUser.username].purchases.unshift(newPurchase);
+            userDatabase[currentUser.username].balance = currentUser.balance;
 
-            await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.teleId), {
+            await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), {
                 balance: currentUser.balance,
-                purchases: userDatabase[currentUser.teleId].purchases
+                purchases: userDatabase[currentUser.username].purchases
             });
 
             await window.FB.updateDoc(window.FB.doc(window.db, "products", activeProduct.id), {
@@ -703,7 +874,7 @@
             });
 
             if(window.sendTeleNotif) {
-                window.sendTeleNotif(`🛒 *ĐƠN HÀNG MỚI!*\n👤 Telegram ID: \`${currentUser.teleId}\`\n📦 Sản phẩm: *${activeProduct.name}*\n🔢 Số lượng: *${qty}*\n💰 Tổng tiền: *${total.toLocaleString()}đ*`);
+                window.sendTeleNotif(`🛒 *ĐƠN HÀNG MỚI!*\n👤 User: \`${currentUser.username}\`\n💬 Telegram ID: \`${currentUser.telegramId}\`\n📦 Sản phẩm: *${activeProduct.name}*\n🔢 Số lượng: *${qty}*\n💰 Tổng tiền: *${total.toLocaleString()}đ*`);
             }
 
             updateUserHeader();
@@ -715,11 +886,11 @@
 
         function renderUserHistory() {
             const body = document.getElementById('historyTableBody');
-            if (!currentUser.teleId) {
-                body.innerHTML = `<tr><td colspan="6" class="p-5 text-center text-slate-400">Vui lòng đăng nhập bằng Telegram ID để xem lịch sử.</td></tr>`;
+            if (currentUser.username === 'khachhang') {
+                body.innerHTML = `<tr><td colspan="6" class="p-5 text-center text-slate-400">Vui lòng đăng nhập để xem lịch sử mua hàng.</td></tr>`;
                 return;
             }
-            let uData = userDatabase[currentUser.teleId];
+            let uData = userDatabase[currentUser.username];
             if(!uData) return;
             const nowMs = new Date().getTime();
             const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
@@ -747,7 +918,7 @@
         }
 
         function openViewAccModal(orderId) {
-            let uData = userDatabase[currentUser.teleId];
+            let uData = userDatabase[currentUser.username];
             selectedOrderForView = uData.purchases.find(x => x.id === orderId);
             if (!selectedOrderForView) return;
             updateFormattedPreview();
@@ -816,8 +987,8 @@
             let totalOrdersCount = 0;
             let totalDepositsAmount = 0;
 
-            Object.keys(userDatabase).forEach(teleId => {
-                let u = userDatabase[teleId];
+            Object.keys(userDatabase).forEach(uname => {
+                let u = userDatabase[uname];
                 totalBalance += u.balance || 0;
                 if(u.purchases) totalOrdersCount += u.purchases.length;
                 if(u.deposits) u.deposits.forEach(d => totalDepositsAmount += d.amount || 0);
@@ -874,13 +1045,15 @@
 
         function renderAdminUsersTable() {
             const tbody = document.getElementById('adminUsersTableBody');
-            tbody.innerHTML = Object.keys(userDatabase).map(teleId => {
-                let u = userDatabase[teleId];
+            tbody.innerHTML = Object.keys(userDatabase).map(uname => {
+                let u = userDatabase[uname];
                 return `
                     <tr class="hover:bg-slate-50">
-                        <td class="p-2 font-mono font-bold text-blue-600">${teleId}</td>
+                        <td class="p-2 font-bold">${uname}</td>
+                        <td class="p-2 font-mono text-red-600">${u.password}</td>
+                        <td class="p-2 font-mono text-blue-600">${u.telegramId || 'Chưa liên kết'}</td>
                         <td class="p-2 font-bold text-emerald-600">${(u.balance || 0).toLocaleString()}đ</td>
-                        <td class="p-2 text-right"><button onclick="navigator.clipboard.writeText('${teleId}');alert('Đã copy ID!');" class="px-2 py-0.5 bg-slate-200 hover:bg-slate-300 rounded text-[9px] font-bold">Copy ID</button></td>
+                        <td class="p-2 text-right"><button onclick="navigator.clipboard.writeText('${uname}');alert('Đã copy username!');" class="px-2 py-0.5 bg-slate-200 hover:bg-slate-300 rounded text-[9px] font-bold">Copy</button></td>
                     </tr>
                 `;
             }).join('');
@@ -906,13 +1079,9 @@
         async function adminAdjustBalance() {
             const target = document.getElementById('adminTargetUser').value.trim();
             const amt = parseInt(document.getElementById('adminAmount').value) || 0;
-            if(!target) return alert("Vui lòng nhập Telegram ID khách hàng!");
-            
-            if(!userDatabase[target]) {
-                userDatabase[target] = { balance: 0, purchases: [], deposits: [] };
-            }
+            if(!userDatabase[target]) return alert("Không tìm thấy tên đăng nhập của khách!");
             userDatabase[target].balance += amt;
-            await window.FB.setDoc(window.FB.doc(window.db, "users", target), userDatabase[target], { merge: true });
+            await window.FB.updateDoc(window.FB.doc(window.db, "users", target), { balance: userDatabase[target].balance });
             alert("✅ Đã cập nhật số dư ví thành công!");
         }
 
