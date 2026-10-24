@@ -189,7 +189,7 @@
     <p class="font-bold text-slate-700">© 2026 VHUNGFB.COM - Hệ Thống Cung Cấp Nguyên Liệu Facebook Tự Động 24/7</p>
     <p>
         <button onclick="openTermsModal()" class="text-blue-600 hover:underline font-bold">Điều Khoản Dịch Vụ & Chính Sách Bảo Hành</button> | 
-        Hỗ trợ Telegram Admin: <a href="[https://t.me/rrpcmad](https://t.me/rrpcmad)" target="_blank" class="text-blue-600 hover:underline">@rrpcmad</a>
+        Hỗ trợ Telegram Admin: <a href="https://t.me/rrpcmad" target="_blank" class="text-blue-600 hover:underline">@rrpcmad</a>
     </p>
 </footer>
 
@@ -449,8 +449,8 @@
 
 <!-- FIREBASE SDKs -->
 <script type="module">
-    import { initializeApp } from "[https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js](https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js)";
-    import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc, getDocs, onSnapshot } from "[https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js](https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js)";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyDC39BWx1s1CW27dLQCk-E4fFvIHDXudjg",
@@ -473,7 +473,7 @@
     window.FB = { getDoc, setDoc, updateDoc, deleteDoc, getDocs, doc, onSnapshot };
 
     window.sendTeleNotif = function(text) {
-        const url = `[https://api.telegram.org/bot$](https://api.telegram.org/bot$){TELE_BOT_TOKEN}/sendMessage?chat_id=${ADMIN_TELE_CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
+        const url = `https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendMessage?chat_id=${ADMIN_TELE_CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
         fetch(url).catch(e => console.log(e));
     };
 
@@ -905,7 +905,7 @@
         const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
 
         document.getElementById('txtPageMemo').textContent = memo;
-        document.getElementById('imgPageQR').src = `[https://img.vietqr.io/image/MSB-96886693054380-compact2.png?amount=$](https://img.vietqr.io/image/MSB-96886693054380-compact2.png?amount=$){amount}&addInfo=${encodeURIComponent(memo)}`;
+        document.getElementById('imgPageQR').src = `https://img.vietqr.io/image/MSB-96886693054380-compact2.png?amount=${amount}&addInfo=${encodeURIComponent(memo)}`;
         document.getElementById('pageQrContainer').classList.remove('hidden');
 
         currentUser.balance += amount;
