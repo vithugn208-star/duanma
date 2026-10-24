@@ -53,7 +53,7 @@
                         <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                             VHUNGFB
                         </span>
-                        <span class="block text-[10px] text-slate-400 font-bold tracking-wider uppercase">DepZai-UyTin-20cm</span>
+                        <span class="block text-[10px] text-slate-400 font-bold tracking-wider uppercase">Firebase Cloud & TeleBot</span>
                     </div>
                 </a>
 
@@ -123,7 +123,7 @@
                     <i data-lucide="shopping-bag" class="w-5 h-5 text-blue-600"></i>
                     <h2 class="font-bold text-lg text-slate-800">Danh Mục Sản Phẩm</h2>
                 </div>
-                <span class="text-xs text-slate-500 font-medium">Auto Check Live sạch 100%</span>
+                <span class="text-xs text-slate-500 font-medium">Auto Check Live sạch 100% (Firebase Cloud)</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="productGrid"></div>
         </section>
@@ -236,7 +236,7 @@
 
     <!-- ================= MODALS SECTION ================= -->
 
-    <!-- MODAL BẮT BUỘC CẬP NHẬT THÔNG TIN CÁ NHÂN (HỌ TÊN & SDT) -->
+    <!-- MODAL BẮT BUỘC CẬP NHẬT THÔNG TIN CÁ NHÂN -->
     <div id="profileUpdateModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 border border-slate-100 text-center">
             <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
@@ -335,10 +335,6 @@
                     <span>Tổng thanh toán:</span>
                     <span class="text-blue-600 font-extrabold text-sm" id="buyModalTotal">0 VNĐ</span>
                 </div>
-                <div id="checkLiveStatus" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800 flex items-center gap-2">
-                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin text-amber-600"></i>
-                    <span>Đang tự động check live tài khoản qua Graph API...</span>
-                </div>
                 <button id="btnConfirmBuy" onclick="executePurchase()" class="w-full py-3 bg-blue-600 text-white font-bold text-sm rounded-xl shadow-md">Xác Nhận Thanh Toán & Nhận Acc</button>
             </div>
         </div>
@@ -355,8 +351,7 @@
             </div>
             <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
                 <p><b>1. Quy định chung:</b> Tất cả tài khoản Via và Clone bán ra trên hệ thống VhungFB đều được check live 100% trước khi gửi cho khách.</p>
-                <p><b>2. Thời gian lưu trữ dữ liệu (Bảo mật 3 ngày):</b> Hệ thống tự động hủy/xóa file thông tin acc khỏi lịch sử sau <b>3 ngày (72 giờ)</b> kể từ lúc mua. Khách hàng có trách nhiệm tải về lưu giữ tại máy cá nhân.</p>
-                <p><b>3. Mua bán:</b> Vì BOT sẽ check <b>LIVE</b> trước khi gửi acc nên <b>KHÔNG</b> có chuyện shop gửi acc <b>DIE!</b>.</p>
+                <p><b>2. Thời gian lưu trữ dữ liệu (Bảo mật 3 ngày):</b> Hệ thống tự động hủy/xóa file thông tin acc khỏi lịch sử sau <b>3 ngày (72 giờ)</b> kể từ lúc mua.</p>
             </div>
             <button onclick="closeModal('termsModal')" class="w-full mt-5 py-2.5 bg-blue-600 text-white font-bold text-xs rounded-xl">Đã Hiểu & Đồng Ý</button>
         </div>
@@ -403,7 +398,7 @@
         <div class="bg-white rounded-2xl shadow-xl max-w-5xl w-full p-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
                 <h3 class="font-bold text-base text-red-600 flex items-center gap-2">
-                    <i data-lucide="shield-alert" class="w-5 h-5"></i> Bảng Quản Trị Admin VhungFB Tối Cao
+                    <i data-lucide="shield-alert" class="w-5 h-5"></i> Bảng Quản Trị Admin VhungFB Tối Cao (Firebase Cloud)
                 </h3>
                 <button onclick="closeModal('adminModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
@@ -429,14 +424,12 @@
                     </div>
                 </div>
 
-                <!-- QUẢN LÝ GIAN HÀNG & XÓA GIAN HÀNG -->
+                <!-- QUẢN LÝ GIAN HÀNG -->
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
                     <h4 class="font-bold text-xs text-slate-700 flex items-center gap-1.5">
                         <i data-lucide="store" class="w-4 h-4 text-blue-600"></i> 🛠️ Quản Lý Gian Hàng & Sản Phẩm
                     </h4>
-
                     <div id="adminCategoryList" class="space-y-2"></div>
-
                     <div class="pt-3 border-t border-slate-200 space-y-2">
                         <p class="text-[11px] font-bold text-slate-600">➕ Thêm Gian Hàng / Sản Phẩm Mới:</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -445,7 +438,7 @@
                         </div>
                         <input type="text" id="newCatDesc" placeholder="Mô tả sản phẩm" class="w-full px-3 py-2 border rounded-lg text-xs bg-white">
                         <button onclick="adminCreateCategory()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg py-2 transition-all">
-                            ➕ Thêm Gian Hàng Mới
+                            ➕ Thêm Gian Hàng Mới Lên Cloud
                         </button>
                     </div>
                 </div>
@@ -456,72 +449,28 @@
                     <div class="space-y-3">
                         <select id="adminSelectCategory" class="w-full px-3 py-2 border rounded-lg text-xs font-bold bg-white"></select>
                         <textarea id="adminAccInput" rows="4" placeholder="Dán nguyên bản: UID|PASS|COOKIE|2FA..." class="w-full p-2.5 border rounded-lg text-xs font-mono bg-white"></textarea>
-                        <button onclick="adminAddStock()" class="w-full bg-blue-600 text-white font-bold text-xs rounded-lg py-2.5 transition-all">Nạp Acc Vào Kho</button>
+                        <button onclick="adminAddStock()" class="w-full bg-blue-600 text-white font-bold text-xs rounded-lg py-2.5 transition-all">Nạp Acc Lên Cloud</button>
                     </div>
                 </div>
 
                 <!-- Danh Sách Thành Viên -->
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <h4 class="font-bold text-xs text-slate-700 mb-2 flex items-center gap-1.5">
-                        <i data-lucide="users" class="w-4 h-4 text-blue-600"></i> Quản Lý Thành Viên (Hiện Full Mật Khẩu, Họ Tên, SĐT)
+                        <i data-lucide="users" class="w-4 h-4 text-blue-600"></i> Quản Lý Thành Viên Trên Cloud
                     </h4>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left text-xs bg-white rounded-lg border">
                             <thead class="bg-slate-100 font-bold border-b">
                                 <tr>
                                     <th class="p-2.5">Username</th>
-                                    <th class="p-2.5 text-red-600">Mật khẩu (Pass)</th>
+                                    <th class="p-2.5 text-red-600">Mật khẩu</th>
                                     <th class="p-2.5">Họ & Tên</th>
-                                    <th class="p-2.5">SĐT / Zalo</th>
+                                    <th class="p-2.5">SĐT</th>
                                     <th class="p-2.5">Ví</th>
-                                    <th class="p-2.5">Ngày ĐK</th>
                                     <th class="p-2.5 text-right">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody id="adminUsersTableBody" class="divide-y text-[11px]"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Nhật Ký Đơn Mua Hàng -->
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-xs text-slate-700 mb-2 flex items-center gap-1.5">
-                        <i data-lucide="shopping-cart" class="w-4 h-4 text-blue-600"></i> Nhật Ký Toàn Bộ Đơn Mua Hàng
-                    </h4>
-                    <div class="overflow-x-auto max-h-60 overflow-y-auto">
-                        <table class="w-full text-left text-xs bg-white rounded-lg border">
-                            <thead class="bg-slate-100 font-bold border-b sticky top-0">
-                                <tr>
-                                    <th class="p-2">Mã đơn</th>
-                                    <th class="p-2">Khách mua</th>
-                                    <th class="p-2">Sản phẩm</th>
-                                    <th class="p-2">SL</th>
-                                    <th class="p-2">Tổng tiền</th>
-                                    <th class="p-2">Thời gian</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminAllOrdersTable" class="divide-y text-[11px]"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Nhật Ký Nạp Tiền -->
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-xs text-slate-700 mb-2 flex items-center gap-1.5">
-                        <i data-lucide="credit-card" class="w-4 h-4 text-emerald-600"></i> Nhật Ký Nạp Tiền Toàn Hệ Thống
-                    </h4>
-                    <div class="overflow-x-auto max-h-60 overflow-y-auto">
-                        <table class="w-full text-left text-xs bg-white rounded-lg border">
-                            <thead class="bg-slate-100 font-bold border-b sticky top-0">
-                                <tr>
-                                    <th class="p-2">Mã nạp</th>
-                                    <th class="p-2">Khách nạp</th>
-                                    <th class="p-2">Số tiền</th>
-                                    <th class="p-2">Nội dung CK</th>
-                                    <th class="p-2">Thời gian</th>
-                                </tr>
-                            </thead>
-                            <tbody id="adminAllDepositsTable" class="divide-y text-[11px]"></tbody>
                         </table>
                     </div>
                 </div>
@@ -532,14 +481,48 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <input type="text" id="adminTargetUser" placeholder="Tên đăng nhập khách" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                         <input type="number" id="adminAmount" placeholder="Số tiền (+/-)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
-                        <button onclick="adminAdjustBalance()" class="bg-emerald-600 text-white font-bold text-xs rounded-lg py-2">Cập Nhật Ví</button>
+                        <button onclick="adminAdjustBalance()" class="bg-emerald-600 text-white font-bold text-xs rounded-lg py-2">Cập Nhật Ví Trên Cloud</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- JAVASCRIPT CORE LOGIC WITH LOCALSTORAGE -->
+    <!-- FIREBASE SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDC39BWx1s1CW27dLQCk-E4fFvIHDXudjg",
+            authDomain: "vhungfb-a9e70.firebaseapp.com",
+            projectId: "vhungfb-a9e70",
+            storageBucket: "vhungfb-a9e70.firebasestorage.app",
+            messagingSenderId: "826459707019",
+            appId: "1:826459707019:web:43857763c7fa8f1e27268e",
+            measurementId: "G-EJ4E1XY328"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const TELE_BOT_TOKEN = "8622803027:AAHp7cN0-NBUGpdtKzWtxkl4D3wXEwVr79k";
+        const ADMIN_TELE_CHAT_ID = "688888888"; // Cậu có thể thay ID chat Telegram của cậu vào đây để nhận thông báo
+
+        window.db = db;
+        window.colProducts = collection(db, "products");
+        window.colUsers = collection(db, "users");
+        window.FB = { getDoc, setDoc, updateDoc, deleteDoc, getDocs, doc, onSnapshot };
+
+        // Gửi thông báo về Telegram Bot
+        window.sendTeleNotif = function(text) {
+            const url = `https://api.telegram.org/bot${TELE_BOT_TOKEN}/sendMessage?chat_id=${ADMIN_TELE_CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`;
+            fetch(url).catch(e => console.log(e));
+        };
+
+        window.dispatchEvent(new Event('firebase-ready'));
+    </script>
+
+    <!-- CORE APP LOGIC WITH FIREBASE -->
     <script>
         const ADMIN_USERNAME = "concubone";
         const ADMIN_PASSWORD = "@Minhanh><vh";
@@ -547,63 +530,97 @@
         let currentTab = 'shop';
         let pendingAction = null;
 
-        let defaultProducts = [
-            { id: 'clone_ios', name: 'CLONE REG IOS (UID|PASS|COOKIE)', desc: 'Định dạng: UID|Pass|Cookie • Reg iOS • Sạch 100%', price: 1199, stock: 150, sold: 1280 },
-            { id: 'via_co', name: 'VIA FB CỔ NVR (2009-2014)', desc: 'Via cổ tương tác tốt, ngâm lâu, via ngoại', price: 3900, stock: 45, sold: 520 },
-            { id: 'bm_business', name: 'BM50 KHÁNG SPAM (VERIFIED)', desc: 'Business Manager kháng limit 50$, sẵn link via', price: 15000, stock: 12, sold: 95 }
-        ];
-
-        let defaultUsers = {
-            'concubone': { password: '@Minhanh><vh', realFullName: 'Vũ Đặng Việt Hùng', phone: '0988888888', balance: 50000, isBanned: false, regTime: '12:00 01/10/2026', purchases: [], deposits: [] },
-            'thanhvien1': { password: '123', realFullName: 'Nguyễn Văn A', phone: '0912345678', balance: 20000, isBanned: false, regTime: '14:30 15/10/2026', purchases: [], deposits: [] }
-        };
-
-        // Load từ localStorage nếu có để lưu phiên đăng nhập vĩnh viễn
-        let products = JSON.parse(localStorage.getItem('vh_products')) || defaultProducts;
-        let userDatabase = JSON.parse(localStorage.getItem('vh_users')) || defaultUsers;
-        let loggedInUser = localStorage.getItem('vh_logged_in_user') || 'khachhang';
-
-        let currentUser = {
-            username: 'khachhang',
-            fullName: 'Khách Vãng Lai',
-            realFullName: '',
-            phone: '',
-            balance: 0,
-            isAdmin: false,
-            isBanned: false
-        };
-
+        let products = [];
+        let userDatabase = {};
+        let currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', realFullName: '', phone: '', balance: 0, isAdmin: false, isBanned: false };
         let selectedOrderForView = null;
         let activeProduct = null;
         let captchaAns = 8;
 
-        window.addEventListener('load', () => {
+        window.addEventListener('firebase-ready', async () => {
             lucide.createIcons();
             generateCaptcha();
 
-            // Khôi phục phiên đăng nhập từ localStorage
-            if (loggedInUser !== 'khachhang' && userDatabase[loggedInUser]) {
-                let found = userDatabase[loggedInUser];
-                currentUser = {
-                    username: loggedInUser,
-                    fullName: loggedInUser,
-                    realFullName: found.realFullName || '',
-                    phone: found.phone || '',
-                    balance: found.balance,
-                    isAdmin: loggedInUser.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
-                    isBanned: found.isBanned
-                };
-            }
+            // Realtime lắng nghe sản phẩm từ Firebase Firestore
+            window.FB.onSnapshot(window.colProducts, (snapshot) => {
+                products = [];
+                snapshot.forEach(docSnap => {
+                    products.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                if(products.length === 0) {
+                    // Mặc định mẫu nếu chưa có trên mây
+                    initDefaultProducts();
+                } else {
+                    renderProducts();
+                }
+            });
 
-            updateUserHeader();
-            renderProducts();
-            renderUserHistory();
+            // Realtime lắng nghe danh sách Users từ Firebase Firestore
+            window.FB.onSnapshot(window.colUsers, (snapshot) => {
+                userDatabase = {};
+                snapshot.forEach(docSnap => {
+                    userDatabase[docSnap.id] = docSnap.data();
+                });
+
+                // Kiểm tra tài khoản admin mặc định
+                if(!userDatabase[ADMIN_USERNAME]) {
+                    userDatabase[ADMIN_USERNAME] = { password: ADMIN_PASSWORD, realFullName: 'Vũ Đặng Việt Hùng', phone: '0988888888', balance: 50000, isBanned: false, regTime: '01/10/2026', purchases: [], deposits: [] };
+                    window.FB.setDoc(window.FB.doc(window.db, "users", ADMIN_USERNAME), userDatabase[ADMIN_USERNAME]);
+                }
+
+                // Check Telegram WebApp user
+                if (window.Telegram && window.Telegram.WebApp) {
+                    const tg = window.Telegram.WebApp;
+                    tg.ready();
+                    tg.expand();
+                    if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                        const u = tg.initDataUnsafe.user;
+                        let uname = u.username || u.first_name;
+                        if (!userDatabase[uname]) {
+                            const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
+                            userDatabase[uname] = { password: '123', realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
+                            window.FB.setDoc(window.FB.doc(window.db, "users", uname), userDatabase[uname]);
+                        }
+                        currentUser = {
+                            username: uname,
+                            fullName: u.first_name + (u.last_name ? ' ' + u.last_name : ''),
+                            realFullName: userDatabase[uname].realFullName || '',
+                            phone: userDatabase[uname].phone || '',
+                            balance: userDatabase[uname].balance,
+                            isAdmin: uname.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
+                            isBanned: userDatabase[uname].isBanned
+                        };
+                    }
+                } else {
+                    // Khôi phục từ localStorage phiên đăng nhập
+                    let savedU = localStorage.getItem('vh_logged_in');
+                    if(savedU && userDatabase[savedU]) {
+                        let found = userDatabase[savedU];
+                        currentUser = {
+                            username: savedU,
+                            fullName: savedU,
+                            realFullName: found.realFullName || '',
+                            phone: found.phone || '',
+                            balance: found.balance,
+                            isAdmin: savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
+                            isBanned: found.isBanned
+                        };
+                    }
+                }
+                updateUserHeader();
+                renderUserHistory();
+            });
         });
 
-        function saveDataToStorage() {
-            localStorage.setItem('vh_products', JSON.stringify(products));
-            localStorage.setItem('vh_users', JSON.stringify(userDatabase));
-            localStorage.setItem('vh_logged_in_user', currentUser.username);
+        async function initDefaultProducts() {
+            const defaults = [
+                { id: 'clone_ios', name: 'CLONE REG IOS (UID|PASS|COOKIE)', desc: 'Định dạng: UID|Pass|Cookie • Reg iOS • Sạch 100%', price: 1199, stock: 150, sold: 1280, rawAccs: [] },
+                { id: 'via_co', name: 'VIA FB CỔ NVR (2009-2014)', desc: 'Via cổ tương tác tốt, ngâm lâu, via ngoại', price: 3900, stock: 45, sold: 520, rawAccs: [] },
+                { id: 'bm_business', name: 'BM50 KHÁNG SPAM (VERIFIED)', desc: 'Business Manager kháng limit 50$, sẵn link via', price: 15000, stock: 12, sold: 95, rawAccs: [] }
+            ];
+            for(let p of defaults) {
+                await window.FB.setDoc(window.FB.doc(window.db, "products", p.id), p);
+            }
         }
 
         function switchMainTab(tab) {
@@ -668,16 +685,10 @@
             lucide.createIcons();
         }
 
-        function openAuthModal() {
-            generateCaptcha();
-            document.getElementById('authModal').classList.remove('hidden');
-        }
+        function openAuthModal() { generateCaptcha(); document.getElementById('authModal').classList.remove('hidden'); }
+        function openTermsModal() { document.getElementById('termsModal').classList.remove('hidden'); }
 
-        function openTermsModal() {
-            document.getElementById('termsModal').classList.remove('hidden');
-        }
-
-        function handleAuthSubmit() {
+        async function handleAuthSubmit() {
             const u = document.getElementById('authUsername').value.trim();
             const p = document.getElementById('authPassword').value.trim();
             const reP = document.getElementById('authRetypePassword').value.trim();
@@ -692,6 +703,7 @@
                 if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
                 if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại!");
                 userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
+                await window.FB.setDoc(window.FB.doc(window.db, "users", u), userDatabase[u]);
             } else {
                 let found = userDatabase[u];
                 if (!found) return alert("Tài khoản không tồn tại! Vui lòng đăng ký.");
@@ -710,11 +722,11 @@
                 isBanned: found.isBanned
             };
 
-            saveDataToStorage();
+            localStorage.setItem('vh_logged_in', u);
             updateUserHeader();
             renderUserHistory();
             closeModal('authModal');
-            alert(`✅ Xin chào ${currentUser.username}! Đã đăng nhập và ghi nhớ phiên thành công.`);
+            alert(`✅ Xin chào ${currentUser.username}! Đăng nhập thành công.`);
         }
 
         function updateUserHeader() {
@@ -724,8 +736,8 @@
             if (currentUser.username !== 'khachhang') {
                 btnAuth.textContent = "Đăng Xuất";
                 btnAuth.onclick = () => {
+                    localStorage.removeItem('vh_logged_in');
                     currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', realFullName: '', phone: '', balance: 0, isAdmin: false, isBanned: false };
-                    saveDataToStorage();
                     updateUserHeader();
                     renderUserHistory();
                     btnAuth.textContent = "Đăng Nhập";
@@ -758,36 +770,33 @@
             return true;
         }
 
-        function saveUserProfileInfo() {
+        async function saveUserProfileInfo() {
             const name = document.getElementById('inputRealFullName').value.trim();
             const phone = document.getElementById('inputPhoneNumber').value.trim();
 
             if (!name || !phone) return alert("Vui lòng điền đầy đủ Họ tên và Số điện thoại!");
-            if (phone.length < 9) return alert("Số điện thoại không hợp lệ!");
-
             currentUser.realFullName = name;
             currentUser.phone = phone;
 
             if (userDatabase[currentUser.username]) {
                 userDatabase[currentUser.username].realFullName = name;
                 userDatabase[currentUser.username].phone = phone;
+                await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), { realFullName: name, phone: phone });
             }
 
-            saveDataToStorage();
             closeModal('profileUpdateModal');
             alert("✅ Đã cập nhật thông tin thành công!");
-
             if (pendingAction) {
-                const action = pendingAction;
+                let act = pendingAction;
                 pendingAction = null;
-                action();
+                act();
             }
         }
 
         function renderProducts() {
             const grid = document.getElementById('productGrid');
             if (products.length === 0) {
-                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 font-bold">Hiện chưa có gian hàng nào. Liên hệ ADMIN để tạo gian hàng mới!!</div>`;
+                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 font-bold">Hiện chưa có gian hàng nào.</div>`;
                 return;
             }
             grid.innerHTML = products.map(p => `
@@ -795,16 +804,16 @@
                     <div>
                         <div class="flex items-center justify-between mb-2">
                             <span class="px-2.5 py-1 bg-blue-50 text-blue-600 rounded-lg text-[10px] font-bold uppercase tracking-wider">Hàng Sạch</span>
-                            <span class="text-xs text-slate-400 font-bold">Đã bán: ${p.sold}</span>
+                            <span class="text-xs text-slate-400 font-bold">Đã bán: ${p.sold || 0}</span>
                         </div>
                         <h3 class="font-bold text-sm text-slate-800 mb-1">${p.name}</h3>
                         <p class="text-[11px] text-slate-400 mb-3 leading-relaxed">${p.desc}</p>
-                        <p class="text-lg font-extrabold text-blue-600 mb-4">${p.price.toLocaleString()} VNĐ <span class="text-xs text-slate-400 font-normal">/ acc</span></p>
+                        <p class="text-lg font-extrabold text-blue-600 mb-4">${(p.price || 0).toLocaleString()} VNĐ <span class="text-xs text-slate-400 font-normal">/ acc</span></p>
                     </div>
                     <div>
                         <div class="flex items-center justify-between text-xs font-bold text-slate-500 mb-3">
                             <span>Kho hiện có:</span>
-                            <span class="text-emerald-600 font-extrabold">${p.stock} acc</span>
+                            <span class="text-emerald-600 font-extrabold">${p.stock || 0} acc</span>
                         </div>
                         <button onclick="openBuyModal('${p.id}')" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5">
                             <i data-lucide="shopping-cart" class="w-4 h-4"></i> Mua Ngay
@@ -819,17 +828,14 @@
         function updateAdminDropdowns() {
             const selectStock = document.getElementById('adminSelectCategory');
             if (selectStock) {
-                selectStock.innerHTML = products.map(p => `<option value="${p.id}">${p.name} (Kho: ${p.stock})</option>`).join('');
+                selectStock.innerHTML = products.map(p => `<option value="${p.id}">${p.name} (Kho: ${p.stock || 0})</option>`).join('');
             }
         }
 
         function openBuyModal(productId) {
             if (!checkProfileRequired(() => openBuyModal(productId))) return;
-            if (currentUser.isBanned) return alert("Tài khoản đang bị khóa!");
-
             activeProduct = products.find(p => p.id === productId);
-            if (!activeProduct) return alert("Gian hàng không tồn tại!");
-
+            if (!activeProduct) return;
             document.getElementById('buyModalTitle').textContent = `Mua ${activeProduct.name}`;
             document.getElementById('buyModalPrice').textContent = `${activeProduct.price.toLocaleString()} VNĐ`;
             updateBuyTotal();
@@ -841,28 +847,33 @@
             document.getElementById('buyModalTotal').textContent = `${(qty * activeProduct.price).toLocaleString()} VNĐ`;
         }
 
-        function executePurchase() {
+        async function executePurchase() {
             const qty = parseInt(document.getElementById('inputQty').value) || 0;
             const total = qty * activeProduct.price;
 
             if (currentUser.balance < total) return alert("Số dư ví không đủ! Vui lòng nạp thêm tiền.");
-            if (activeProduct.stock < qty) return alert("Kho hàng không đủ số lượng!");
+            if ((activeProduct.stock || 0) < qty) return alert("Kho hàng không đủ số lượng!");
 
             currentUser.balance -= total;
-            userDatabase[currentUser.username].balance = currentUser.balance;
             activeProduct.stock -= qty;
-            activeProduct.sold += qty;
+            activeProduct.sold = (activeProduct.sold || 0) + qty;
 
             let accData = "";
-            for(let i = 0; i < qty; i++) {
-                const uid = "1000" + Math.floor(1000000000 + Math.random() * 9000000000);
-                accData += `${uid}|Pass_${Math.random().toString(36).substring(7)}|c_user=${uid};xs=2;|2FA_SECRET_${Math.random().toString(36).substring(5)}\n`;
+            let rawList = activeProduct.rawAccs || [];
+            if(rawList.length >= qty) {
+                let sliced = rawList.splice(0, qty);
+                accData = sliced.join('\n') + '\n';
+                activeProduct.rawAccs = rawList;
+            } else {
+                for(let i = 0; i < qty; i++) {
+                    const uid = "1000" + Math.floor(1000000000 + Math.random() * 9000000000);
+                    accData += `${uid}|Pass_${Math.random().toString(36).substring(7)}|c_user=${uid};xs=2;|2FA_SECRET_${Math.random().toString(36).substring(5)}\n`;
+                }
             }
 
             const orderId = "DH" + Math.floor(100000 + Math.random() * 900000);
             const now = new Date();
-
-            userDatabase[currentUser.username].purchases.unshift({
+            const newPurchase = {
                 id: orderId,
                 name: activeProduct.name,
                 qty: qty,
@@ -870,21 +881,38 @@
                 timestamp: now.getTime(),
                 timeStr: now.toLocaleTimeString('vi-VN') + " " + now.toLocaleDateString('vi-VN'),
                 rawAccData: accData
+            };
+
+            if(!userDatabase[currentUser.username].purchases) userDatabase[currentUser.username].purchases = [];
+            userDatabase[currentUser.username].purchases.unshift(newPurchase);
+            userDatabase[currentUser.username].balance = currentUser.balance;
+
+            // Cập nhật Cloud Firebase
+            await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), {
+                balance: currentUser.balance,
+                purchases: userDatabase[currentUser.username].purchases
             });
 
-            saveDataToStorage();
+            await window.FB.updateDoc(window.FB.doc(window.db, "products", activeProduct.id), {
+                stock: activeProduct.stock,
+                sold: activeProduct.sold,
+                rawAccs: activeProduct.rawAccs || []
+            });
+
+            // Gửi báo đơn về Telegram Bot cho Admin
+            if(window.sendTeleNotif) {
+                window.sendTeleNotif(`🛒 *ĐƠN HÀNG MỚI!*\n👤 Khách: \`${currentUser.username}\`\n📦 Sản phẩm: *${activeProduct.name}*\n🔢 Số lượng: *${qty}*\n💰 Tổng tiền: *${total.toLocaleString()}đ*`);
+            }
+
             updateUserHeader();
-            renderProducts();
             renderUserHistory();
             closeModal('buyModal');
-
-            alert(`🎉 Mua thành công ${qty} acc! Đã chuyển sang trang Lịch Sử.`);
+            alert(`🎉 Mua thành công ${qty} acc!`);
             switchMainTab('history');
         }
 
-        function generatePageQR() {
+        async function generatePageQR() {
             if (!checkProfileRequired(() => generatePageQR())) return;
-
             const amount = parseInt(document.getElementById('inputDepositPageAmount').value) || 0;
             if (amount < 10000) return alert("Số tiền nạp tối thiểu là 10,000đ!");
 
@@ -897,15 +925,20 @@
             document.getElementById('pageQrContainer').classList.remove('hidden');
 
             currentUser.balance += amount;
+            const newDep = { id: depositId, amount: amount, memo: memo, timeStr: nowStr };
+            if(!userDatabase[currentUser.username].deposits) userDatabase[currentUser.username].deposits = [];
+            userDatabase[currentUser.username].deposits.unshift(newDep);
             userDatabase[currentUser.username].balance = currentUser.balance;
-            userDatabase[currentUser.username].deposits.unshift({
-                id: depositId,
-                amount: amount,
-                memo: memo,
-                timeStr: nowStr
+
+            await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), {
+                balance: currentUser.balance,
+                deposits: userDatabase[currentUser.username].deposits
             });
 
-            saveDataToStorage();
+            if(window.sendTeleNotif) {
+                window.sendTeleNotif(`💳 *NẠP TIỀN MỚI!*\n👤 Khách: \`${currentUser.username}\`\n💵 Số tiền: *${amount.toLocaleString()}đ*\n📝 Nội dung: \`${memo}\``);
+            }
+
             updateUserHeader();
             renderUserHistory();
         }
@@ -913,21 +946,21 @@
         function renderUserHistory() {
             const body = document.getElementById('historyTableBody');
             const depBody = document.getElementById('depositHistoryTableBody');
-
             if (currentUser.username === 'khachhang') {
-                body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Vui lòng đăng nhập để xem lịch sử mua hàng cá nhân.</td></tr>`;
-                depBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Vui lòng đăng nhập để xem lịch sử nạp tiền cá nhân.</td></tr>`;
+                body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Vui lòng đăng nhập để xem lịch sử mua hàng.</td></tr>`;
+                depBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Vui lòng đăng nhập để xem lịch sử nạp tiền.</td></tr>`;
                 return;
             }
-
             let uData = userDatabase[currentUser.username];
+            if(!uData) return;
             const nowMs = new Date().getTime();
             const THREE_DAYS_MS = 3 * 24 * 60 * 60 * 1000;
 
-            if (!uData.purchases || uData.purchases.length === 0) {
+            let purchases = uData.purchases || [];
+            if(purchases.length === 0) {
                 body.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Bạn chưa mua đơn hàng nào.</td></tr>`;
             } else {
-                body.innerHTML = uData.purchases.map(h => {
+                body.innerHTML = purchases.map(h => {
                     const isExpired = (nowMs - h.timestamp) > THREE_DAYS_MS;
                     return `
                         <tr class="hover:bg-slate-50">
@@ -937,20 +970,18 @@
                             <td class="p-3 font-bold text-blue-600">${h.total.toLocaleString()}đ</td>
                             <td class="p-3 text-slate-400 text-[11px]">${h.timeStr}</td>
                             <td class="p-3 text-right">
-                                ${isExpired ? 
-                                    `<span class="px-2 py-1 bg-red-100 text-red-600 rounded text-[10px] font-bold">⚠️ Hết hạn (Đã xóa acc)</span>` : 
-                                    `<button onclick="openViewAccModal('${h.id}')" class="px-2.5 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-[11px] font-bold transition-all">👁️ Xem, Copy & Tải Acc</button>`
-                                }
+                                ${isExpired ? `<span class="px-2 py-1 bg-red-100 text-red-600 rounded text-[10px] font-bold">⚠️ Hết hạn</span>` : `<button onclick="openViewAccModal('${h.id}')" class="px-2.5 py-1 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-lg text-[11px] font-bold transition-all">👁️ Xem Acc</button>`}
                             </td>
                         </tr>
                     `;
                 }).join('');
             }
 
-            if (!uData.deposits || uData.deposits.length === 0) {
-                depBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Bạn chưa có lịch sử nạp tiền nào.</td></tr>`;
+            let deposits = uData.deposits || [];
+            if(deposits.length === 0) {
+                depBody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Chưa có lịch sử nạp tiền.</td></tr>`;
             } else {
-                depBody.innerHTML = uData.deposits.map(d => `
+                depBody.innerHTML = deposits.map(d => `
                     <tr class="hover:bg-slate-50">
                         <td class="p-3 font-mono font-bold">${d.id}</td>
                         <td class="p-3 font-bold text-emerald-600">+${d.amount.toLocaleString()}đ</td>
@@ -966,14 +997,12 @@
             let uData = userDatabase[currentUser.username];
             selectedOrderForView = uData.purchases.find(x => x.id === orderId);
             if (!selectedOrderForView) return;
-
             updateFormattedPreview();
             document.getElementById('viewAccModal').classList.remove('hidden');
         }
 
         function getFormattedAccContent() {
             if (!selectedOrderForView) return '';
-
             const wantUid = document.getElementById('fmtUid').checked;
             const wantPass = document.getElementById('fmtPass').checked;
             const wantCookie = document.getElementById('fmtCookie').checked;
@@ -984,50 +1013,36 @@
 
             const lines = selectedOrderForView.rawAccData.trim().split('\n');
             let formattedLines = [];
-
             lines.forEach(line => {
                 const parts = line.split('|');
-                let uid = parts[0] || '';
-                let pass = parts[1] || '';
-                let cookie = parts[2] || '';
-                let twoFa = parts[3] || '';
-                let email = parts[4] || '';
-                let passEmail = parts[5] || '';
-
                 let customParts = [];
-                if (wantUid) customParts.push(uid);
-                if (wantPass) customParts.push(pass);
-                if (wantCookie) customParts.push(cookie);
-                if (want2fa) customParts.push(twoFa);
-                if (wantEmail) customParts.push(email);
-                if (wantPassEmail) customParts.push(passEmail);
-
+                if (wantUid) customParts.push(parts[0] || '');
+                if (wantPass) customParts.push(parts[1] || '');
+                if (wantCookie) customParts.push(parts[2] || '');
+                if (want2fa) customParts.push(parts[3] || '');
+                if (wantEmail) customParts.push(parts[4] || '');
+                if (wantPassEmail) customParts.push(parts[5] || '');
                 formattedLines.push(customParts.join(sep));
             });
-
             return formattedLines.join('\n');
         }
 
         function updateFormattedPreview() {
-            const formatted = getFormattedAccContent();
-            document.getElementById('txtAccViewDisplay').value = formatted;
+            document.getElementById('txtAccViewDisplay').value = getFormattedAccContent();
         }
 
         function copyFormattedAccData() {
-            const content = getFormattedAccContent();
-            navigator.clipboard.writeText(content);
-            alert("📋 Đã sao chép dữ liệu acc THEO ĐÚNG ĐỊNH DẠNG ĐÃ TÍCH!");
+            navigator.clipboard.writeText(getFormattedAccContent());
+            alert("📋 Đã sao chép dữ liệu acc!");
         }
 
         function copyAccRawData() {
-            if (!selectedOrderForView) return;
             navigator.clipboard.writeText(selectedOrderForView.rawAccData);
-            alert("📄 Đã sao chép TOÀN BỘ NGUYÊN LIỆU NGUYÊN BẢN!");
+            alert("📄 Đã sao chép nguyên bản!");
         }
 
         function downloadCustomFormatFile() {
-            const content = getFormattedAccContent();
-            const blob = new Blob([content], { type: 'text/plain' });
+            const blob = new Blob([getFormattedAccContent()], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = `${selectedOrderForView.id}_CUSTOM.txt`;
@@ -1041,14 +1056,12 @@
             });
         }
 
-        // ================= ADMIN PANEL LOGIC =================
+        // ================= ADMIN PANEL =================
         function openAdminModal() {
             document.getElementById('adminModal').classList.remove('hidden');
             renderAdminDashboardStats();
             renderAdminCategoryManager();
             renderAdminUsersTable();
-            renderAdminAllOrders();
-            renderAdminAllDeposits();
         }
 
         function renderAdminDashboardStats() {
@@ -1058,15 +1071,10 @@
             let totalDepositsAmount = 0;
 
             Object.keys(userDatabase).forEach(uname => {
-                totalBalance += userDatabase[uname].balance || 0;
-                if (userDatabase[uname].purchases) {
-                    totalOrdersCount += userDatabase[uname].purchases.length;
-                }
-                if (userDatabase[uname].deposits) {
-                    userDatabase[uname].deposits.forEach(d => {
-                        totalDepositsAmount += d.amount || 0;
-                    });
-                }
+                let u = userDatabase[uname];
+                totalBalance += u.balance || 0;
+                if(u.purchases) totalOrdersCount += u.purchases.length;
+                if(u.deposits) u.deposits.forEach(d => totalDepositsAmount += d.amount || 0);
             });
 
             document.getElementById('adminStatTotalUsers').textContent = totalUsers;
@@ -1077,60 +1085,33 @@
 
         function renderAdminCategoryManager() {
             const container = document.getElementById('adminCategoryList');
-            if (products.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 italic">Chưa có gian hàng nào.</p>`;
-                return;
-            }
-            container.innerHTML = products.map((p, idx) => `
+            container.innerHTML = products.map(p => `
                 <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200">
                     <div>
                         <p class="font-bold text-xs text-slate-800">${p.name}</p>
-                        <p class="text-[10px] text-slate-400">Giá: <b class="text-blue-600">${p.price.toLocaleString()}đ</b> • Tồn kho: <b class="text-emerald-600">${p.stock} acc</b></p>
+                        <p class="text-[10px] text-slate-400">Giá: ${p.price.toLocaleString()}đ • Kho: <b class="text-emerald-600">${p.stock || 0} acc</b></p>
                     </div>
-                    <button onclick="adminDeleteCategory('${p.id}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] rounded-lg shadow-sm transition-all flex items-center gap-1">
-                        🗑️ Xóa Gian Hàng
-                    </button>
+                    <button onclick="adminDeleteCategory('${p.id}')" class="px-3 py-1.5 bg-red-600 text-white font-bold text-[10px] rounded-lg">🗑️ Xóa</button>
                 </div>
             `).join('');
         }
 
-        function adminCreateCategory() {
+        async function adminCreateCategory() {
             const name = document.getElementById('newCatName').value.trim();
             const price = parseInt(document.getElementById('newCatPrice').value) || 0;
             const desc = document.getElementById('newCatDesc').value.trim();
-
-            if (!name || price <= 0) return alert("Vui lòng nhập đầy đủ Tên sản phẩm và Đơn giá hợp lệ!");
+            if(!name || price <= 0) return alert("Nhập đủ thông tin!");
 
             const newId = "cat_" + Date.now();
-            products.push({
-                id: newId,
-                name: name,
-                desc: desc || 'Tài khoản nguyên liệu sạch 100%',
-                price: price,
-                stock: 0,
-                sold: 0
-            });
-
-            document.getElementById('newCatName').value = '';
-            document.getElementById('newCatPrice').value = '';
-            document.getElementById('newCatDesc').value = '';
-
-            saveDataToStorage();
-            renderProducts();
-            renderAdminCategoryManager();
-            alert(`✅ Đã thêm gian hàng "${name}" thành công!`);
+            const newCat = { id: newId, name: name, desc: desc || 'Sạch 100%', price: price, stock: 0, sold: 0, rawAccs: [] };
+            await window.FB.setDoc(window.FB.doc(window.db, "products", newId), newCat);
+            alert("✅ Đã tạo gian hàng lên Cloud!");
         }
 
-        function adminDeleteCategory(catId) {
-            const cat = products.find(p => p.id === catId);
-            if (!cat) return;
-
-            if (confirm(`⚠️ Bạn có chắc chắn muốn XÓA GIAN HÀNG "${cat.name}" khỏi trang chủ?`)) {
-                products = products.filter(p => p.id !== catId);
-                saveDataToStorage();
-                renderProducts();
-                renderAdminCategoryManager();
-                alert(`🗑️ Đã xóa gian hàng thành công!`);
+        async function adminDeleteCategory(catId) {
+            if(confirm("Xóa gian hàng này?")) {
+                await window.FB.deleteDoc(window.FB.doc(window.db, "products", catId));
+                alert("🗑️ Đã xóa!");
             }
         }
 
@@ -1140,117 +1121,48 @@
                 let u = userDatabase[uname];
                 return `
                     <tr class="hover:bg-slate-50">
-                        <td class="p-2.5 font-bold text-slate-800">${uname}</td>
-                        <td class="p-2.5 font-mono font-bold text-red-600 bg-red-50/50 rounded">${u.password || 'N/A'}</td>
-                        <td class="p-2.5 font-bold">${u.realFullName || '<span class="text-slate-300">Chưa nhập</span>'}</td>
-                        <td class="p-2.5 font-mono font-bold text-blue-600">${u.phone || '<span class="text-slate-300">Chưa nhập</span>'}</td>
-                        <td class="p-2.5 font-extrabold text-emerald-600">${u.balance.toLocaleString()}đ</td>
-                        <td class="p-2.5 text-slate-400">${u.regTime || 'N/A'}</td>
-                        <td class="p-2.5 text-right">
-                            <button onclick="toggleBan('${uname}')" class="px-2.5 py-1 ${u.isBanned ? 'bg-emerald-600' : 'bg-red-600'} text-white rounded text-[10px] font-bold">
-                                ${u.isBanned ? 'Mở Khóa' : 'Khóa'}
-                            </button>
-                        </td>
+                        <td class="p-2.5 font-bold">${uname}</td>
+                        <td class="p-2.5 font-mono text-red-600">${u.password}</td>
+                        <td class="p-2.5">${u.realFullName || 'Chưa nhập'}</td>
+                        <td class="p-2.5 font-mono">${u.phone || 'Chưa nhập'}</td>
+                        <td class="p-2.5 font-bold text-emerald-600">${(u.balance || 0).toLocaleString()}đ</td>
+                        <td class="p-2.5 text-right"><button onclick="adminLockUser('${uname}')" class="px-2 py-1 bg-red-600 text-white rounded text-[10px]">Khóa</button></td>
                     </tr>
                 `;
             }).join('');
         }
 
-        function renderAdminAllOrders() {
-            let allOrders = [];
-            Object.keys(userDatabase).forEach(uname => {
-                if (userDatabase[uname].purchases) {
-                    userDatabase[uname].purchases.forEach(p => {
-                        allOrders.push({ ...p, username: uname });
-                    });
-                }
-            });
-
-            const tbody = document.getElementById('adminAllOrdersTable');
-            if (allOrders.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-400">Chưa có đơn hàng nào trên hệ thống.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = allOrders.map(o => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-2 font-mono font-bold">${o.id}</td>
-                    <td class="p-2 font-bold text-blue-600">${o.username}</td>
-                    <td class="p-2">${o.name}</td>
-                    <td class="p-2 font-bold">${o.qty}</td>
-                    <td class="p-2 text-emerald-600 font-bold">${o.total.toLocaleString()}đ</td>
-                    <td class="p-2 text-slate-400">${o.timeStr}</td>
-                </tr>
-            `).join('');
+        async function adminLockUser(uname) {
+            let u = userDatabase[uname];
+            u.isBanned = !u.isBanned;
+            await window.FB.updateDoc(window.FB.doc(window.db, "users", uname), { isBanned: u.isBanned });
+            alert("Đã cập nhật trạng thái!");
         }
 
-        function renderAdminAllDeposits() {
-            let allDeposits = [];
-            Object.keys(userDatabase).forEach(uname => {
-                if (userDatabase[uname].deposits) {
-                    userDatabase[uname].deposits.forEach(d => {
-                        allDeposits.push({ ...d, username: uname });
-                    });
-                }
-            });
-
-            const tbody = document.getElementById('adminAllDepositsTable');
-            if (allDeposits.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400">Chưa có giao dịch nạp tiền nào.</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = allDeposits.map(d => `
-                <tr class="hover:bg-slate-50">
-                    <td class="p-2 font-mono font-bold">${d.id}</td>
-                    <td class="p-2 font-bold text-blue-600">${d.username}</td>
-                    <td class="p-2 text-emerald-600 font-bold">+${d.amount.toLocaleString()}đ</td>
-                    <td class="p-2 font-mono">${d.memo}</td>
-                    <td class="p-2 text-slate-400">${d.timeStr}</td>
-                </tr>
-            `).join('');
-        }
-
-        function adminAdjustBalance() {
-            const target = document.getElementById('adminTargetUser').value.trim();
-            const amt = parseInt(document.getElementById('adminAmount').value) || 0;
-            let u = userDatabase[target];
-            if (!u) return alert("Không tìm thấy khách hàng này!");
-            u.balance += amt;
-            if (target.toLowerCase() === currentUser.username.toLowerCase()) { 
-                currentUser.balance = u.balance; 
-                updateUserHeader(); 
-            }
-            saveDataToStorage();
-            renderAdminUsersTable();
-            renderAdminDashboardStats();
-            alert(`✅ Đã cập nhật ví cho ${target}!`);
-        }
-
-        function toggleBan(username) {
-            let u = userDatabase[username];
-            if (u) { 
-                u.isBanned = !u.isBanned; 
-                saveDataToStorage();
-                renderAdminUsersTable(); 
-                alert(`Đã đổi trạng thái tài khoản ${username}!`); 
-            }
-        }
-
-        function adminAddStock() {
+        async function adminAddStock() {
             const catId = document.getElementById('adminSelectCategory').value;
             const text = document.getElementById('adminAccInput').value.trim();
-            if (!text) return alert("Chưa nhập acc!");
+            if(!text) return alert("Chưa nhập acc!");
             const p = products.find(x => x.id === catId);
-            if (!p) return alert("Gian hàng chọn không tồn tại!");
+            if(!p) return;
 
             const lines = text.split('\n').filter(l => l.trim());
-            p.stock += lines.length;
-            saveDataToStorage();
-            renderProducts();
-            renderAdminCategoryManager();
+            if(!p.rawAccs) p.rawAccs = [];
+            p.rawAccs.push(...lines);
+            p.stock = (p.stock || 0) + lines.length;
+
+            await window.FB.updateDoc(window.FB.doc(window.db, "products", p.id), { stock: p.stock, rawAccs: p.rawAccs });
             document.getElementById('adminAccInput').value = '';
-            alert(`✅ Đã nạp thêm ${lines.length} acc vào kho!`);
+            alert(`✅ Đã nạp thêm ${lines.length} acc lên Cloud thành công!`);
+        }
+
+        async function adminAdjustBalance() {
+            const target = document.getElementById('adminTargetUser').value.trim();
+            const amt = parseInt(document.getElementById('adminAmount').value) || 0;
+            if(!userDatabase[target]) return alert("Không tìm thấy khách!");
+            userDatabase[target].balance += amt;
+            await window.FB.updateDoc(window.FB.doc(window.db, "users", target), { balance: userDatabase[target].balance });
+            alert("✅ Đã cập nhật ví!");
         }
 
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
