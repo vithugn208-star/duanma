@@ -536,23 +536,23 @@
         let activeProduct = null;
         let captchaAns = 8;
 
+        // KHÔI PHỤC NGAY LẬP TỨC PHIÊN ĐĂNG NHẬP TỪ LOCALSTORAGE TRƯỚC KHI FIREBASE LOAD
+        let savedU = localStorage.getItem('vh_logged_in');
+        if (savedU && savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
+            currentUser = {
+                username: ADMIN_USERNAME,
+                fullName: ADMIN_USERNAME,
+                realFullName: 'Vũ Đặng Việt Hùng',
+                phone: '',
+                balance: 0,
+                isAdmin: true,
+                isBanned: false
+            };
+        }
+
         window.addEventListener('firebase-ready', async () => {
             lucide.createIcons();
             generateCaptcha();
-
-            // Khôi phục ngay lập tức phiên đăng nhập từ localStorage để chống lỗi F5 bị mất
-            let savedU = localStorage.getItem('vh_logged_in');
-            if (savedU && savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
-                currentUser = {
-                    username: ADMIN_USERNAME,
-                    fullName: ADMIN_USERNAME,
-                    realFullName: 'Vũ Đặng Việt Hùng',
-                    phone: '',
-                    balance: 0,
-                    isAdmin: true,
-                    isBanned: false
-                };
-            }
 
             // Realtime lắng nghe sản phẩm từ Firebase Firestore
             window.FB.onSnapshot(window.colProducts, (snapshot) => {
@@ -574,7 +574,7 @@
                     userDatabase[docSnap.id] = docSnap.data();
                 });
 
-                // Nếu đang lưu phiên đăng nhập, đồng bộ lại dữ liệu user chuẩn xác
+                // Đồng bộ lại dữ liệu user chuẩn xác từ Firestore dựa theo localStorage hiện tại
                 let currentSavedU = localStorage.getItem('vh_logged_in');
                 if (currentSavedU) {
                     if (currentSavedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
@@ -1118,16 +1118,20 @@
 
             const newId = "cat_" + Date.now();
             const newCat = { id: newId, name: name, desc: desc || 'Sạch 100%', price: price, stock: 0, sold: 0, rawAccs: [] };
+            
+            // Đưa ngay vào mảng cục bộ để cập nhật giao diện lập tức (tránh độ trễ mạng)
+            products.push(newCat);
+            renderAdminCategoryManager();
+            updateAdminDropdowns();
+            renderProducts();
+
+            // Lưu lên Firebase Cloud
             await window.FB.setDoc(window.FB.doc(window.db, "products", newId), newCat);
             
             // Xóa trắng ô input sau khi thêm thành công
             document.getElementById('newCatName').value = '';
             document.getElementById('newCatPrice').value = '';
             document.getElementById('newCatDesc').value = '';
-
-            // BỔ SUNG 2 DÒNG NÀY ĐỂ GIAO DIỆN TỰ ĐỘNG HIỂN THỊ NGAY LẬP TỨC:
-            renderAdminCategoryManager();
-            updateAdminDropdowns();
 
             alert("✅ Đã tạo gian hàng mới lên Cloud thành công!");
         }
