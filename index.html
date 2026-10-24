@@ -536,7 +536,7 @@
         let activeProduct = null;
         let captchaAns = 8;
 
-        // KHÔI PHỤC NGAY LẬP TỨC PHIÊN ĐĂNG NHẬP TỪ LOCALSTORAGE TRƯỚC KHI FIREBASE LOAD
+        // Khôi phục phiên đăng nhập localStorage ngay từ đầu
         let savedU = localStorage.getItem('vh_logged_in');
         if (savedU && savedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
             currentUser = {
@@ -554,7 +554,7 @@
             lucide.createIcons();
             generateCaptcha();
 
-            // Realtime lắng nghe sản phẩm từ Firebase Firestore
+            // Realtime lắng nghe sản phẩm
             window.FB.onSnapshot(window.colProducts, (snapshot) => {
                 products = [];
                 snapshot.forEach(docSnap => {
@@ -567,14 +567,13 @@
                 }
             });
 
-            // Realtime lắng nghe danh sách Users từ Firebase Firestore
+            // Realtime lắng nghe danh sách Users từ Firebase Firestore (`console.firebase.google.com`)
             window.FB.onSnapshot(window.colUsers, (snapshot) => {
                 userDatabase = {};
                 snapshot.forEach(docSnap => {
                     userDatabase[docSnap.id] = docSnap.data();
                 });
 
-                // Đồng bộ lại dữ liệu user chuẩn xác từ Firestore dựa theo localStorage hiện tại
                 let currentSavedU = localStorage.getItem('vh_logged_in');
                 if (currentSavedU) {
                     if (currentSavedU.toLowerCase() === ADMIN_USERNAME.toLowerCase()) {
@@ -603,6 +602,9 @@
 
                 updateUserHeader();
                 renderUserHistory();
+                if(currentUser.isAdmin) {
+                    renderAdminUsersTable();
+                }
             });
         });
 
@@ -661,7 +663,7 @@
             } else {
                 tabR.className = "pb-2 text-sm font-bold text-blue-600 border-b-2 border-blue-600";
                 tabL.className = "pb-2 text-sm font-bold text-slate-400";
-                btn.textContent = "Đăng Ký & Đăng Nhập Luôn";
+                btn.textContent = "Đăng Ký & Tự Động Đăng Nhập";
                 retypeContainer.classList.remove('hidden');
             }
         }
@@ -712,37 +714,64 @@
                 return;
             }
 
-            // Xử lý đăng nhập / đăng ký cho khách
+            // Xử lý ĐĂNG KÝ hoặc ĐĂNG NHẬP CHO KHÁCH
             const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
             if (authMode === 'register') {
                 const reP = document.getElementById('authRetypePassword').value.trim();
                 if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
-                if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại!");
-                userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
+                if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại trên hệ thống!");
+                
+                // Tạo data khách hàng mới
+                userDatabase[u] = { 
+                    password: p, 
+                    realFullName: '', 
+                    phone: '', 
+                    balance: 0, 
+                    isBanned: false, 
+                    regTime: nowStr, 
+                    purchases: [], 
+                    deposits: [] 
+                };
+
+                // LƯU TRỮ TRỰC TIẾP LÊN FIREBASE CONSOLE (console.firebase.google.com -> collection users)
                 await window.FB.setDoc(window.FB.doc(window.db, "users", u), userDatabase[u]);
+                
+                // Gửi thông báo về Telegram cho Admin
+                if(window.sendTeleNotif) {
+                    window.sendTeleNotif(`👤 *KHÁCH ĐĂNG KÝ MỚI!*\n- Username: \`${u}\`\n- Thời gian: *${nowStr}*`);
+                }
+
+                alert(`🎉 Đăng ký thành công! Hệ thống đã lưu tài khoản và tự động đăng nhập cho bạn.`);
             } else {
                 let found = userDatabase[u];
-                if (!found) return alert("Tài khoản không tồn tại! Vui lòng đăng ký.");
-                if (found.password !== p) return alert("Mật khẩu không chính xác!");
-                if (found.isBanned) return alert("Tài khoản này đã bị khóa!");
+                if (!found) return alert("Tài khoản không tồn tại! Vui lòng kiểm tra lại hoặc bấm sang tab Đăng Ký.");
+                if (found.password !== p) return alert("Mật khẩu đăng nhập không chính xác!");
+                if (found.isBanned) return alert("Tài khoản này đã bị khóa truy cập!");
             }
 
-            let found = userDatabase[u];
+            // Gán phiên làm việc hiện tại và lưu vào localStorage để chống mất F5
+            let foundData = userDatabase[u];
             currentUser = {
                 username: u,
                 fullName: u,
-                realFullName: found.realFullName || '',
-                phone: found.phone || '',
-                balance: found.balance || 0,
+                realFullName: foundData.realFullName || '',
+                phone: foundData.phone || '',
+                balance: foundData.balance || 0,
                 isAdmin: false,
-                isBanned: found.isBanned || false
+                isBanned: foundData.isBanned || false
             };
 
             localStorage.setItem('vh_logged_in', u);
             updateUserHeader();
             renderUserHistory();
             closeModal('authModal');
-            alert(`✅ Xin chào ${currentUser.username}! Đăng nhập thành công.`);
+            
+            // Nếu chưa cập nhật thông tin cá nhân (SĐT, Họ tên), bật modal yêu cầu cập nhật ngay
+            if (!currentUser.phone || !currentUser.realFullName) {
+                document.getElementById('inputRealFullName').value = '';
+                document.getElementById('inputPhoneNumber').value = '';
+                document.getElementById('profileUpdateModal').classList.remove('hidden');
+            }
         }
 
         function updateUserHeader() {
@@ -1119,16 +1148,13 @@
             const newId = "cat_" + Date.now();
             const newCat = { id: newId, name: name, desc: desc || 'Sạch 100%', price: price, stock: 0, sold: 0, rawAccs: [] };
             
-            // Đưa ngay vào mảng cục bộ để cập nhật giao diện lập tức (tránh độ trễ mạng)
             products.push(newCat);
             renderAdminCategoryManager();
             updateAdminDropdowns();
             renderProducts();
 
-            // Lưu lên Firebase Cloud
             await window.FB.setDoc(window.FB.doc(window.db, "products", newId), newCat);
             
-            // Xóa trắng ô input sau khi thêm thành công
             document.getElementById('newCatName').value = '';
             document.getElementById('newCatPrice').value = '';
             document.getElementById('newCatDesc').value = '';
