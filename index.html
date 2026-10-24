@@ -398,12 +398,12 @@
         </div>
     </div>
 
-    <!-- MODAL QUẢN TRỊ ADMIN PANEL (THÊM TÍNH NĂNG XÓA / THÊM GIAN HÀNG) -->
+    <!-- MODAL QUẢN TRỊ ADMIN PANEL -->
     <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-5xl w-full p-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
                 <h3 class="font-bold text-base text-red-600 flex items-center gap-2">
-                    <i data-lucide="shield-alert" class="w-5 h-5"></i> Bảng Quản Trị Admin VhungFB Tối Cáo
+                    <i data-lucide="shield-alert" class="w-5 h-5"></i> Bảng Quản Trị Admin VhungFB Tối Cao
                 </h3>
                 <button onclick="closeModal('adminModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
@@ -435,14 +435,12 @@
                         <i data-lucide="store" class="w-4 h-4 text-blue-600"></i> 🛠️ Quản Lý Gian Hàng & Sản Phẩm
                     </h4>
 
-                    <!-- Danh Sách Gian Hàng Hiện Có & Nút Xóa -->
                     <div id="adminCategoryList" class="space-y-2"></div>
 
-                    <!-- Form Thêm Gian Hàng Mới -->
                     <div class="pt-3 border-t border-slate-200 space-y-2">
                         <p class="text-[11px] font-bold text-slate-600">➕ Thêm Gian Hàng / Sản Phẩm Mới:</p>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            <input type="text" id="newCatName" placeholder="Tên sản phẩm (VD: VIA VIA CỔ 2012)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
+                            <input type="text" id="newCatName" placeholder="Tên sản phẩm (VD: VIA CỔ 2012)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                             <input type="number" id="newCatPrice" placeholder="Đơn giá (VD: 5000)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                         </div>
                         <input type="text" id="newCatDesc" placeholder="Mô tả sản phẩm" class="w-full px-3 py-2 border rounded-lg text-xs bg-white">
@@ -458,7 +456,7 @@
                     <div class="space-y-3">
                         <select id="adminSelectCategory" class="w-full px-3 py-2 border rounded-lg text-xs font-bold bg-white"></select>
                         <textarea id="adminAccInput" rows="4" placeholder="Dán nguyên bản: UID|PASS|COOKIE|2FA..." class="w-full p-2.5 border rounded-lg text-xs font-mono bg-white"></textarea>
-                        <button onclick="adminAddStock()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg py-2.5 transition-all">Nạp Acc Vào Kho</button>
+                        <button onclick="adminAddStock()" class="w-full bg-blue-600 text-white font-bold text-xs rounded-lg py-2.5 transition-all">Nạp Acc Vào Kho</button>
                     </div>
                 </div>
 
@@ -541,7 +539,7 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT CORE LOGIC -->
+    <!-- JAVASCRIPT CORE LOGIC WITH LOCALSTORAGE -->
     <script>
         const ADMIN_USERNAME = "concubone";
         const ADMIN_PASSWORD = "@Minhanh><vh";
@@ -549,11 +547,21 @@
         let currentTab = 'shop';
         let pendingAction = null;
 
-        let products = [
-            { id: 'clone_ios', name: 'CLONE REG IOS (UID|PASS|COOKIE)', desc: 'Định dạng: UID|Pass|Cookie • Reg iOS • Sạch 100%', price: 1199, stock: 150, sold: 1280, rawAccs: [] },
-            { id: 'via_co', name: 'VIA FB CỔ NVR (2009-2014)', desc: 'Via cổ tương tác tốt, ngâm lâu, via ngoại', price: 3900, stock: 45, sold: 520, rawAccs: [] },
-            { id: 'bm_business', name: 'BM50 KHÁNG SPAM (VERIFIED)', desc: 'Business Manager kháng limit 50$, sẵn link via', price: 15000, stock: 12, sold: 95, rawAccs: [] }
+        let defaultProducts = [
+            { id: 'clone_ios', name: 'CLONE REG IOS (UID|PASS|COOKIE)', desc: 'Định dạng: UID|Pass|Cookie • Reg iOS • Sạch 100%', price: 1199, stock: 150, sold: 1280 },
+            { id: 'via_co', name: 'VIA FB CỔ NVR (2009-2014)', desc: 'Via cổ tương tác tốt, ngâm lâu, via ngoại', price: 3900, stock: 45, sold: 520 },
+            { id: 'bm_business', name: 'BM50 KHÁNG SPAM (VERIFIED)', desc: 'Business Manager kháng limit 50$, sẵn link via', price: 15000, stock: 12, sold: 95 }
         ];
+
+        let defaultUsers = {
+            'concubone': { password: '@Minhanh><vh', realFullName: 'Vũ Đặng Việt Hùng', phone: '0988888888', balance: 50000, isBanned: false, regTime: '12:00 01/10/2026', purchases: [], deposits: [] },
+            'thanhvien1': { password: '123', realFullName: 'Nguyễn Văn A', phone: '0912345678', balance: 20000, isBanned: false, regTime: '14:30 15/10/2026', purchases: [], deposits: [] }
+        };
+
+        // Load từ localStorage nếu có để lưu phiên đăng nhập vĩnh viễn
+        let products = JSON.parse(localStorage.getItem('vh_products')) || defaultProducts;
+        let userDatabase = JSON.parse(localStorage.getItem('vh_users')) || defaultUsers;
+        let loggedInUser = localStorage.getItem('vh_logged_in_user') || 'khachhang';
 
         let currentUser = {
             username: 'khachhang',
@@ -565,11 +573,6 @@
             isBanned: false
         };
 
-        let userDatabase = {
-            'concubone': { password: '@Minhanh><vh', realFullName: 'Vũ Đặng Việt Hùng', phone: '0988888888', balance: 50000, isBanned: false, regTime: '12:00 01/10/2026', purchases: [], deposits: [] },
-            'thanhvien1': { password: '123', realFullName: 'Nguyễn Văn A', phone: '0912345678', balance: 20000, isBanned: false, regTime: '14:30 15/10/2026', purchases: [], deposits: [] }
-        };
-
         let selectedOrderForView = null;
         let activeProduct = null;
         let captchaAns = 8;
@@ -578,32 +581,30 @@
             lucide.createIcons();
             generateCaptcha();
 
-            if (window.Telegram && window.Telegram.WebApp) {
-                const tg = window.Telegram.WebApp;
-                tg.ready();
-                tg.expand();
-                if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-                    const u = tg.initDataUnsafe.user;
-                    let uname = u.username || u.first_name;
-                    if (!userDatabase[uname]) {
-                        const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
-                        userDatabase[uname] = { password: '123', realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
-                    }
-                    currentUser = {
-                        username: uname,
-                        fullName: u.first_name + (u.last_name ? ' ' + u.last_name : ''),
-                        realFullName: userDatabase[uname].realFullName || '',
-                        phone: userDatabase[uname].phone || '',
-                        balance: userDatabase[uname].balance,
-                        isAdmin: uname.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
-                        isBanned: userDatabase[uname].isBanned
-                    };
-                }
+            // Khôi phục phiên đăng nhập từ localStorage
+            if (loggedInUser !== 'khachhang' && userDatabase[loggedInUser]) {
+                let found = userDatabase[loggedInUser];
+                currentUser = {
+                    username: loggedInUser,
+                    fullName: loggedInUser,
+                    realFullName: found.realFullName || '',
+                    phone: found.phone || '',
+                    balance: found.balance,
+                    isAdmin: loggedInUser.toLowerCase() === ADMIN_USERNAME.toLowerCase(),
+                    isBanned: found.isBanned
+                };
             }
+
             updateUserHeader();
             renderProducts();
             renderUserHistory();
         });
+
+        function saveDataToStorage() {
+            localStorage.setItem('vh_products', JSON.stringify(products));
+            localStorage.setItem('vh_users', JSON.stringify(userDatabase));
+            localStorage.setItem('vh_logged_in_user', currentUser.username);
+        }
 
         function switchMainTab(tab) {
             currentTab = tab;
@@ -709,10 +710,11 @@
                 isBanned: found.isBanned
             };
 
+            saveDataToStorage();
             updateUserHeader();
             renderUserHistory();
             closeModal('authModal');
-            alert(`✅ Xin chào ${currentUser.username}! Đã đăng nhập thành công.`);
+            alert(`✅ Xin chào ${currentUser.username}! Đã đăng nhập và ghi nhớ phiên thành công.`);
         }
 
         function updateUserHeader() {
@@ -723,6 +725,7 @@
                 btnAuth.textContent = "Đăng Xuất";
                 btnAuth.onclick = () => {
                     currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', realFullName: '', phone: '', balance: 0, isAdmin: false, isBanned: false };
+                    saveDataToStorage();
                     updateUserHeader();
                     renderUserHistory();
                     btnAuth.textContent = "Đăng Nhập";
@@ -770,6 +773,7 @@
                 userDatabase[currentUser.username].phone = phone;
             }
 
+            saveDataToStorage();
             closeModal('profileUpdateModal');
             alert("✅ Đã cập nhật thông tin thành công!");
 
@@ -868,6 +872,7 @@
                 rawAccData: accData
             });
 
+            saveDataToStorage();
             updateUserHeader();
             renderProducts();
             renderUserHistory();
@@ -900,6 +905,7 @@
                 timeStr: nowStr
             });
 
+            saveDataToStorage();
             updateUserHeader();
             renderUserHistory();
         }
@@ -1035,7 +1041,7 @@
             });
         }
 
-        // ================= ADMIN PANEL LOGIC (THÊM / XÓA GIAN HÀNG) =================
+        // ================= ADMIN PANEL LOGIC =================
         function openAdminModal() {
             document.getElementById('adminModal').classList.remove('hidden');
             renderAdminDashboardStats();
@@ -1069,7 +1075,6 @@
             document.getElementById('adminStatTotalDeposits').textContent = totalDepositsAmount.toLocaleString() + 'đ';
         }
 
-        // Bảng Quản Lý Gian Hàng & Nút Xóa Gian Hàng
         function renderAdminCategoryManager() {
             const container = document.getElementById('adminCategoryList');
             if (products.length === 0) {
@@ -1089,7 +1094,6 @@
             `).join('');
         }
 
-        // Thêm Gian Hàng Mới
         function adminCreateCategory() {
             const name = document.getElementById('newCatName').value.trim();
             const price = parseInt(document.getElementById('newCatPrice').value) || 0;
@@ -1104,26 +1108,26 @@
                 desc: desc || 'Tài khoản nguyên liệu sạch 100%',
                 price: price,
                 stock: 0,
-                sold: 0,
-                rawAccs: []
+                sold: 0
             });
 
             document.getElementById('newCatName').value = '';
             document.getElementById('newCatPrice').value = '';
             document.getElementById('newCatDesc').value = '';
 
+            saveDataToStorage();
             renderProducts();
             renderAdminCategoryManager();
             alert(`✅ Đã thêm gian hàng "${name}" thành công!`);
         }
 
-        // Xóa Gian Hàng
         function adminDeleteCategory(catId) {
             const cat = products.find(p => p.id === catId);
             if (!cat) return;
 
             if (confirm(`⚠️ Bạn có chắc chắn muốn XÓA GIAN HÀNG "${cat.name}" khỏi trang chủ?`)) {
                 products = products.filter(p => p.id !== catId);
+                saveDataToStorage();
                 renderProducts();
                 renderAdminCategoryManager();
                 alert(`🗑️ Đã xóa gian hàng thành công!`);
@@ -1217,6 +1221,7 @@
                 currentUser.balance = u.balance; 
                 updateUserHeader(); 
             }
+            saveDataToStorage();
             renderAdminUsersTable();
             renderAdminDashboardStats();
             alert(`✅ Đã cập nhật ví cho ${target}!`);
@@ -1226,6 +1231,7 @@
             let u = userDatabase[username];
             if (u) { 
                 u.isBanned = !u.isBanned; 
+                saveDataToStorage();
                 renderAdminUsersTable(); 
                 alert(`Đã đổi trạng thái tài khoản ${username}!`); 
             }
@@ -1240,6 +1246,7 @@
 
             const lines = text.split('\n').filter(l => l.trim());
             p.stock += lines.length;
+            saveDataToStorage();
             renderProducts();
             renderAdminCategoryManager();
             document.getElementById('adminAccInput').value = '';
