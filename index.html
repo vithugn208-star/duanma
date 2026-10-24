@@ -598,16 +598,6 @@
                             isAdmin: false,
                             isBanned: found.isBanned || false
                         };
-                    } else {
-                        currentUser = {
-                            username: currentSavedU,
-                            fullName: currentSavedU,
-                            realFullName: '',
-                            phone: '',
-                            balance: 0,
-                            isAdmin: false,
-                            isBanned: false
-                        };
                     }
                 }
 
@@ -1128,8 +1118,6 @@
 
             const newId = "cat_" + Date.now();
             const newCat = { id: newId, name: name, desc: desc || 'Sạch 100%', price: price, stock: 0, sold: 0, rawAccs: [] };
-            
-            // Đẩy lên Firebase Cloud Firestore
             await window.FB.setDoc(window.FB.doc(window.db, "products", newId), newCat);
             
             // Xóa trắng ô input sau khi thêm thành công
@@ -1137,11 +1125,9 @@
             document.getElementById('newCatPrice').value = '';
             document.getElementById('newCatDesc').value = '';
 
-            // CẬP NHẬT TRỰC TIẾP MẢNG LOCAL ĐỂ GIAO DIỆN HIỂN THỊ NGAY LẬP TỨC KHÔNG CẦN CHỜ SNAPSHOT
-            products.push(newCat);
+            // BỔ SUNG 2 DÒNG NÀY ĐỂ GIAO DIỆN TỰ ĐỘNG HIỂN THỊ NGAY LẬP TỨC:
             renderAdminCategoryManager();
             updateAdminDropdowns();
-            renderProducts();
 
             alert("✅ Đã tạo gian hàng mới lên Cloud thành công!");
         }
@@ -1149,13 +1135,6 @@
         async function adminDeleteCategory(catId) {
             if(confirm("Bạn có chắc chắn muốn xóa gian hàng này?")) {
                 await window.FB.deleteDoc(window.FB.doc(window.db, "products", catId));
-                
-                // Cập nhật lại mảng local và render ngay lập tức
-                products = products.filter(p => p.id !== catId);
-                renderAdminCategoryManager();
-                updateAdminDropdowns();
-                renderProducts();
-
                 alert("🗑️ Đã xóa gian hàng!");
             }
         }
@@ -1198,7 +1177,6 @@
 
             await window.FB.updateDoc(window.FB.doc(window.db, "products", p.id), { stock: p.stock, rawAccs: p.rawAccs });
             document.getElementById('adminAccInput').value = '';
-            renderProducts();
             alert(`✅ Đã nạp thêm ${lines.length} acc lên Cloud thành công!`);
         }
 
