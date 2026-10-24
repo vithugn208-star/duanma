@@ -53,7 +53,7 @@
                         <span class="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                             VHUNGFB
                         </span>
-                        <span class="block text-[10px] text-slate-400 font-bold tracking-wider uppercase">DepTrai-UyTin-20cm</span>
+                        <span class="block text-[10px] text-slate-400 font-bold tracking-wider uppercase">DepZai-UyTin-20cm</span>
                     </div>
                 </a>
 
@@ -362,7 +362,7 @@
         </div>
     </div>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ (BỔ SUNG NÚT MẮT XEM MẬT KHẨU VÀ Ô NHẬP LẠI MẬT KHẨU) -->
+    <!-- MODAL ĐĂNG NHẬP / ĐĂNG KÝ -->
     <div id="authModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 border border-slate-100">
             <div class="flex justify-between items-center mb-4">
@@ -375,7 +375,6 @@
             <div class="space-y-3">
                 <input type="text" id="authUsername" placeholder="Tên đăng nhập" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                 
-                <!-- Ô Mật khẩu có nút Mắt Toggle -->
                 <div class="relative">
                     <input type="password" id="authPassword" placeholder="Mật khẩu" class="w-full px-3.5 py-2.5 pr-10 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                     <button type="button" onclick="togglePasswordVisibility('authPassword', 'eyeIcon1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -383,7 +382,6 @@
                     </button>
                 </div>
 
-                <!-- Ô Nhập lại Mật khẩu (Hiện khi chọn Đăng Ký) -->
                 <div id="retypePasswordContainer" class="hidden relative">
                     <input type="password" id="authRetypePassword" placeholder="Nhập lại mật khẩu" class="w-full px-3.5 py-2.5 pr-10 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                     <button type="button" onclick="togglePasswordVisibility('authRetypePassword', 'eyeIcon2')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -400,12 +398,12 @@
         </div>
     </div>
 
-    <!-- MODAL QUẢN TRỊ ADMIN PANEL (HIỂN THỊ MẬT KHẨU & SỐ ĐIỆN THOẠI KHÁCH) -->
+    <!-- MODAL QUẢN TRỊ ADMIN PANEL (THÊM TÍNH NĂNG XÓA / THÊM GIAN HÀNG) -->
     <div id="adminModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-5xl w-full p-6 border border-slate-100 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 pb-2 border-b border-slate-100">
                 <h3 class="font-bold text-base text-red-600 flex items-center gap-2">
-                    <i data-lucide="shield-alert" class="w-5 h-5"></i> Bảng Quản Trị Admin VhungFB (FULL Mật Khẩu & SĐT)
+                    <i data-lucide="shield-alert" class="w-5 h-5"></i> Bảng Quản Trị Admin VhungFB Tối Cáo
                 </h3>
                 <button onclick="closeModal('adminModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
@@ -431,7 +429,40 @@
                     </div>
                 </div>
 
-                <!-- Danh Sách Thành Viên (CÓ CỘT MẬT KHẨU & SDT KHÁCH) -->
+                <!-- QUẢN LÝ GIAN HÀNG & XÓA GIAN HÀNG -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
+                    <h4 class="font-bold text-xs text-slate-700 flex items-center gap-1.5">
+                        <i data-lucide="store" class="w-4 h-4 text-blue-600"></i> 🛠️ Quản Lý Gian Hàng & Sản Phẩm
+                    </h4>
+
+                    <!-- Danh Sách Gian Hàng Hiện Có & Nút Xóa -->
+                    <div id="adminCategoryList" class="space-y-2"></div>
+
+                    <!-- Form Thêm Gian Hàng Mới -->
+                    <div class="pt-3 border-t border-slate-200 space-y-2">
+                        <p class="text-[11px] font-bold text-slate-600">➕ Thêm Gian Hàng / Sản Phẩm Mới:</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input type="text" id="newCatName" placeholder="Tên sản phẩm (VD: VIA VIA CỔ 2012)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
+                            <input type="number" id="newCatPrice" placeholder="Đơn giá (VD: 5000)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
+                        </div>
+                        <input type="text" id="newCatDesc" placeholder="Mô tả sản phẩm" class="w-full px-3 py-2 border rounded-lg text-xs bg-white">
+                        <button onclick="adminCreateCategory()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg py-2 transition-all">
+                            ➕ Thêm Gian Hàng Mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Nạp Acc Vào Kho -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-xs text-slate-700 mb-2">📦 Nạp Acc Vào Kho (Dán nguyên bản)</h4>
+                    <div class="space-y-3">
+                        <select id="adminSelectCategory" class="w-full px-3 py-2 border rounded-lg text-xs font-bold bg-white"></select>
+                        <textarea id="adminAccInput" rows="4" placeholder="Dán nguyên bản: UID|PASS|COOKIE|2FA..." class="w-full p-2.5 border rounded-lg text-xs font-mono bg-white"></textarea>
+                        <button onclick="adminAddStock()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg py-2.5 transition-all">Nạp Acc Vào Kho</button>
+                    </div>
+                </div>
+
+                <!-- Danh Sách Thành Viên -->
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <h4 class="font-bold text-xs text-slate-700 mb-2 flex items-center gap-1.5">
                         <i data-lucide="users" class="w-4 h-4 text-blue-600"></i> Quản Lý Thành Viên (Hiện Full Mật Khẩu, Họ Tên, SĐT)
@@ -506,16 +537,6 @@
                         <button onclick="adminAdjustBalance()" class="bg-emerald-600 text-white font-bold text-xs rounded-lg py-2">Cập Nhật Ví</button>
                     </div>
                 </div>
-
-                <!-- Nạp Acc Vào Kho -->
-                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <h4 class="font-bold text-xs text-slate-700 mb-2">📦 Nạp Acc Vào Kho (Dán nguyên bản)</h4>
-                    <div class="space-y-3">
-                        <select id="adminSelectCategory" class="w-full px-3 py-2 border rounded-lg text-xs font-bold bg-white"></select>
-                        <textarea id="adminAccInput" rows="4" placeholder="Dán nguyên bản: UID|PASS|COOKIE|2FA..." class="w-full p-2.5 border rounded-lg text-xs font-mono bg-white"></textarea>
-                        <button onclick="adminAddStock()" class="w-full bg-blue-600 text-white font-bold text-xs rounded-lg py-2.5">Nạp Acc Vào Kho</button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -526,7 +547,7 @@
         const ADMIN_PASSWORD = "@Minhanh><vh";
         let authMode = 'login';
         let currentTab = 'shop';
-        let pendingAction = null; // Lưu hành động đang chờ sau khi bổ sung SDT
+        let pendingAction = null;
 
         let products = [
             { id: 'clone_ios', name: 'CLONE REG IOS (UID|PASS|COOKIE)', desc: 'Định dạng: UID|Pass|Cookie • Reg iOS • Sạch 100%', price: 1199, stock: 150, sold: 1280, rawAccs: [] },
@@ -655,7 +676,6 @@
             document.getElementById('termsModal').classList.remove('hidden');
         }
 
-        // ĐĂNG KÝ XONG TỰ ĐỘNG ĐĂNG NHẬP LUÔN & CHECK 2 MẬT KHẨU KHỚP NHAU
         function handleAuthSubmit() {
             const u = document.getElementById('authUsername').value.trim();
             const p = document.getElementById('authPassword').value.trim();
@@ -668,7 +688,7 @@
             const nowStr = new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN');
 
             if (authMode === 'register') {
-                if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp! Vui lòng kiểm tra lại.");
+                if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
                 if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại!");
                 userDatabase[u] = { password: p, realFullName: '', phone: '', balance: 0, isBanned: false, regTime: nowStr, purchases: [], deposits: [] };
             } else {
@@ -719,7 +739,6 @@
             }
         }
 
-        // BẮT BUỘC NHẬP HỌ TÊN VÀ SDT TRƯỚC KHI NẠP HOẶC MUA
         function checkProfileRequired(actionCallback) {
             if (currentUser.username === 'khachhang') {
                 alert("⚠️ Bạn cần ĐĂNG NHẬP hoặc TẠO TÀI KHOẢN trước!");
@@ -763,6 +782,10 @@
 
         function renderProducts() {
             const grid = document.getElementById('productGrid');
+            if (products.length === 0) {
+                grid.innerHTML = `<div class="col-span-full p-8 text-center text-slate-400 font-bold">Hiện chưa có gian hàng nào. Admin hãy nạp sản phẩm mới trong bảng Quản Trị!</div>`;
+                return;
+            }
             grid.innerHTML = products.map(p => `
                 <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
                     <div>
@@ -801,6 +824,8 @@
             if (currentUser.isBanned) return alert("Tài khoản đang bị khóa!");
 
             activeProduct = products.find(p => p.id === productId);
+            if (!activeProduct) return alert("Gian hàng không tồn tại!");
+
             document.getElementById('buyModalTitle').textContent = `Mua ${activeProduct.name}`;
             document.getElementById('buyModalPrice').textContent = `${activeProduct.price.toLocaleString()} VNĐ`;
             updateBuyTotal();
@@ -1010,10 +1035,11 @@
             });
         }
 
-        // ================= ADMIN PANEL LOGIC (BỔ SUNG MẬT KHẨU & SDT KHÁCH) =================
+        // ================= ADMIN PANEL LOGIC (THÊM / XÓA GIAN HÀNG) =================
         function openAdminModal() {
             document.getElementById('adminModal').classList.remove('hidden');
             renderAdminDashboardStats();
+            renderAdminCategoryManager();
             renderAdminUsersTable();
             renderAdminAllOrders();
             renderAdminAllDeposits();
@@ -1041,6 +1067,67 @@
             document.getElementById('adminStatTotalBalance').textContent = totalBalance.toLocaleString() + 'đ';
             document.getElementById('adminStatTotalOrders').textContent = totalOrdersCount;
             document.getElementById('adminStatTotalDeposits').textContent = totalDepositsAmount.toLocaleString() + 'đ';
+        }
+
+        // Bảng Quản Lý Gian Hàng & Nút Xóa Gian Hàng
+        function renderAdminCategoryManager() {
+            const container = document.getElementById('adminCategoryList');
+            if (products.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 italic">Chưa có gian hàng nào.</p>`;
+                return;
+            }
+            container.innerHTML = products.map((p, idx) => `
+                <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border border-slate-200">
+                    <div>
+                        <p class="font-bold text-xs text-slate-800">${p.name}</p>
+                        <p class="text-[10px] text-slate-400">Giá: <b class="text-blue-600">${p.price.toLocaleString()}đ</b> • Tồn kho: <b class="text-emerald-600">${p.stock} acc</b></p>
+                    </div>
+                    <button onclick="adminDeleteCategory('${p.id}')" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-bold text-[10px] rounded-lg shadow-sm transition-all flex items-center gap-1">
+                        🗑️ Xóa Gian Hàng
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Thêm Gian Hàng Mới
+        function adminCreateCategory() {
+            const name = document.getElementById('newCatName').value.trim();
+            const price = parseInt(document.getElementById('newCatPrice').value) || 0;
+            const desc = document.getElementById('newCatDesc').value.trim();
+
+            if (!name || price <= 0) return alert("Vui lòng nhập đầy đủ Tên sản phẩm và Đơn giá hợp lệ!");
+
+            const newId = "cat_" + Date.now();
+            products.push({
+                id: newId,
+                name: name,
+                desc: desc || 'Tài khoản nguyên liệu sạch 100%',
+                price: price,
+                stock: 0,
+                sold: 0,
+                rawAccs: []
+            });
+
+            document.getElementById('newCatName').value = '';
+            document.getElementById('newCatPrice').value = '';
+            document.getElementById('newCatDesc').value = '';
+
+            renderProducts();
+            renderAdminCategoryManager();
+            alert(`✅ Đã thêm gian hàng "${name}" thành công!`);
+        }
+
+        // Xóa Gian Hàng
+        function adminDeleteCategory(catId) {
+            const cat = products.find(p => p.id === catId);
+            if (!cat) return;
+
+            if (confirm(`⚠️ Bạn có chắc chắn muốn XÓA GIAN HÀNG "${cat.name}" khỏi trang chủ?`)) {
+                products = products.filter(p => p.id !== catId);
+                renderProducts();
+                renderAdminCategoryManager();
+                alert(`🗑️ Đã xóa gian hàng thành công!`);
+            }
         }
 
         function renderAdminUsersTable() {
@@ -1149,9 +1236,12 @@
             const text = document.getElementById('adminAccInput').value.trim();
             if (!text) return alert("Chưa nhập acc!");
             const p = products.find(x => x.id === catId);
+            if (!p) return alert("Gian hàng chọn không tồn tại!");
+
             const lines = text.split('\n').filter(l => l.trim());
             p.stock += lines.length;
             renderProducts();
+            renderAdminCategoryManager();
             document.getElementById('adminAccInput').value = '';
             alert(`✅ Đã nạp thêm ${lines.length} acc vào kho!`);
         }
