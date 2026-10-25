@@ -394,15 +394,37 @@
                     </div>
                 </div>
 
-                <!-- QUẢN LÝ GIAN HÀNG & CHỈNH SỬA GIÁ -->
+                <!-- 📊 THỐNG KÊ DOANH THU & SẢN PHẨM ƯU CHUỘNG -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-200 space-y-3">
+                    <h4 class="font-bold text-xs text-blue-900 flex items-center gap-1.5">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 text-blue-600"></i> 📊 Thống Kê Doanh Thu & Sản Phẩm Được Ưa Chuộng Nhất
+                    </h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-xs">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase">Tổng Doanh Thu Bán Hàng</p>
+                            <p id="statTotalRevenue" class="text-base font-extrabold text-blue-600 mt-0.5">0đ</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-xs">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase">Sản Phẩm Bán Chạy Nhất</p>
+                            <p id="statTopProduct" class="text-xs font-bold text-slate-800 mt-1 truncate">Chưa có dữ liệu</p>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-blue-100 shadow-xs">
+                            <p class="text-[10px] font-bold text-slate-400 uppercase">Tổng Lượng Acc Đã Bán</p>
+                            <p id="statTotalQtySold" class="text-base font-extrabold text-emerald-600 mt-0.5">0 acc</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUẢN LÝ GIAN HÀNG & CHỈNH SỬA GIÁ (CÓ MÃ GIAN HÀNG) -->
                 <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
                     <h4 class="font-bold text-xs text-slate-700 flex items-center gap-1.5">
-                        <i data-lucide="store" class="w-4 h-4 text-blue-600"></i> 🛠️ Quản Lý Gian Hàng & Chỉnh Sửa Giá
+                        <i data-lucide="store" class="w-4 h-4 text-blue-600"></i> 🛠️ Quản Lý Gian Hàng & Mã Gian Hàng
                     </h4>
                     <div id="adminCategoryList" class="space-y-2"></div>
                     <div class="pt-2 border-t border-slate-200 space-y-2">
                         <p class="text-[11px] font-bold text-slate-600">➕ Thêm Gian Hàng Mới:</p>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <input type="text" id="newCatId" placeholder="Mã gian hàng (VD: via_ngon)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                             <input type="text" id="newCatName" placeholder="Tên sản phẩm (VD: VIA CỔ)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                             <input type="number" id="newCatPrice" placeholder="Đơn giá (VD: 5000)" class="px-3 py-2 border rounded-lg text-xs font-bold bg-white">
                         </div>
@@ -939,11 +961,9 @@
 
             if (!name || !phone || !telegramId) return alert("Vui lòng điền đầy đủ Họ tên, SĐT và Telegram ID!");
 
-            // KIỂM TRA TRÙNG LẶP TELEGRAM ID (CHỈ CHẶN NẾU TÀI KHOẢN CŨ ĐANG HOẠT ĐỘNG, BỎ QUA NẾU ĐÃ BỊ KHÓA)
             for (let uname in userDatabase) {
                 if (uname !== currentUser.username) {
                     let otherUser = userDatabase[uname];
-                    // Nếu tài khoản cũ đang dùng chung ID này VÀ KHÔNG BỊ KHÓA (!isBanned) thì mới chặn
                     if (otherUser.telegramId && otherUser.telegramId.toString() === telegramId.toString() && !otherUser.isBanned) {
                         alert("❌ Telegram ID này đã được liên kết với tài khoản khác! Vui lòng liên hệ admin @tao vào cho họ nhắn t fix cho họ.");
                         return;
@@ -985,7 +1005,7 @@
                 <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                     <div>
                         <div class="flex items-center justify-between mb-2">
-                            <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Hàng Sạch</span>
+                            <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded-md text-[9px] sm:text-[10px] font-bold uppercase tracking-wider">Mã: ${p.id}</span>
                             <span class="text-xs text-slate-400 font-bold">Đã bán: ${p.sold || 0}</span>
                         </div>
                         <h3 class="font-bold text-xs sm:text-sm text-slate-800 mb-1">${p.name}</h3>
@@ -1010,7 +1030,7 @@
         function updateAdminDropdowns() {
             const selectStock = document.getElementById('adminSelectCategory');
             if (selectStock) {
-                selectStock.innerHTML = products.map(p => `<option value="${p.id}">${p.name} (Kho: ${p.stock || 0})</option>`).join('');
+                selectStock.innerHTML = products.map(p => `<option value="${p.id}">[${p.id}] ${p.name} (Kho: ${p.stock || 0})</option>`).join('');
             }
         }
 
@@ -1131,6 +1151,7 @@
             const now = new Date();
             const newPurchase = {
                 id: orderId,
+                productId: activeProduct.id,
                 name: activeProduct.name,
                 qty: qty,
                 total: total,
@@ -1277,18 +1298,44 @@
             let totalBalance = 0;
             let totalOrdersCount = 0;
             let totalDepositsAmount = 0;
+            let totalRevenue = 0;
+            let totalQtySold = 0;
+            let productSalesCount = {};
 
             Object.keys(userDatabase).forEach(uname => {
                 let u = userDatabase[uname];
                 totalBalance += u.balance || 0;
-                if(u.purchases) totalOrdersCount += u.purchases.length;
                 if(u.deposits) u.deposits.forEach(d => totalDepositsAmount += d.amount || 0);
+                if(u.purchases) {
+                    totalOrdersCount += u.purchases.length;
+                    u.purchases.forEach(o => {
+                        totalRevenue += (o.total || 0);
+                        totalQtySold += (o.qty || 0);
+                        let pKey = o.name || o.productId || 'Khác';
+                        productSalesCount[pKey] = (productSalesCount[pKey] || 0) + (o.qty || 0);
+                    });
+                }
             });
+
+            // Tìm sản phẩm được mua nhiều nhất
+            let topProdName = "Chưa có dữ liệu";
+            let maxQty = -1;
+            for(let pName in productSalesCount) {
+                if(productSalesCount[pName] > maxQty) {
+                    maxQty = productSalesCount[pName];
+                    topProdName = `${pName} (${maxQty} acc)`;
+                }
+            }
 
             document.getElementById('adminStatTotalUsers').textContent = totalUsers;
             document.getElementById('adminStatTotalBalance').textContent = totalBalance.toLocaleString() + 'đ';
             document.getElementById('adminStatTotalOrders').textContent = totalOrdersCount;
             document.getElementById('adminStatTotalDeposits').textContent = totalDepositsAmount.toLocaleString() + 'đ';
+
+            // Gán dữ liệu thống kê doanh thu & sản phẩm ưa chuộng
+            document.getElementById('statTotalRevenue').textContent = totalRevenue.toLocaleString() + 'đ';
+            document.getElementById('statTopProduct').textContent = topProdName;
+            document.getElementById('statTotalQtySold').textContent = totalQtySold + ' acc';
         }
 
         function renderAdminCategoryManager() {
@@ -1298,8 +1345,11 @@
                 <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-2">
                     <div class="flex items-center justify-between">
                         <div class="space-y-0.5">
-                            <p class="font-bold text-xs text-slate-800">${p.name}</p>
-                            <p class="text-[10px] text-slate-400">Giá: <b class="text-blue-600">${(p.price || 0).toLocaleString()}đ</b> • Kho: <b class="text-emerald-600">${p.stock || 0} acc</b></p>
+                            <div class="flex items-center gap-2">
+                                <span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-bold font-mono">ID: ${p.id}</span>
+                                <p class="font-bold text-xs text-slate-800">${p.name}</p>
+                            </div>
+                            <p class="text-[10px] text-slate-400">Giá: <b class="text-blue-600">${(p.price || 0).toLocaleString()}đ</b> • Kho: <b class="text-emerald-600">${p.stock || 0} acc</b> • Đã bán: <b class="text-indigo-600">${p.sold || 0} acc</b></p>
                         </div>
                         <div class="flex gap-1.5">
                             <button onclick="toggleEditCategory('${p.id}')" class="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white font-bold text-[10px] rounded-lg transition-all">✏️ Sửa Giá</button>
@@ -1349,16 +1399,24 @@
         }
 
         async function adminCreateCategory() {
+            let customId = document.getElementById('newCatId').value.trim();
             const name = document.getElementById('newCatName').value.trim();
             const price = parseInt(document.getElementById('newCatPrice').value) || 0;
             const desc = document.getElementById('newCatDesc').value.trim();
+            
             if(!name || price <= 0) return alert("Vui lòng điền đầy đủ tên và đơn giá hợp lệ!");
+            
+            if(!customId) {
+                customId = "cat_" + Date.now();
+            } else {
+                customId = customId.toLowerCase().replace(/\s+/g, '_');
+            }
 
-            const newId = "cat_" + Date.now();
-            const newCat = { id: newId, name: name, desc: desc || 'Sạch 100%', price: price, stock: 0, sold: 0, rawAccs: [] };
+            const newCat = { id: customId, name: name, desc: desc || 'Sạch 100%', price: price, stock: 0, sold: 0, rawAccs: [] };
             
-            await window.FB.setDoc(window.FB.doc(window.db, "products", newId), newCat);
+            await window.FB.setDoc(window.FB.doc(window.db, "products", customId), newCat);
             
+            document.getElementById('newCatId').value = '';
             document.getElementById('newCatName').value = '';
             document.getElementById('newCatPrice').value = '';
             document.getElementById('newCatDesc').value = '';
@@ -1473,7 +1531,6 @@
             `).join('');
         }
 
-        // --- NẠP TIỀN 30 NGÀY + BỘ LỌC THỜI GIAN & XEM ĐƠN ADMIN ---
         function renderAdminAllTransactions() {
             let allDeposits = [];
             let allOrders = [];
@@ -1487,7 +1544,6 @@
             Object.keys(userDatabase).forEach(uname => {
                 let u = userDatabase[uname];
                 
-                // Tự động xóa lịch sử nạp quá 30 ngày
                 if(u.deposits) {
                     u.deposits = u.deposits.filter(d => (nowMs - (d.timestamp || nowMs)) <= THIRTY_DAYS_MS);
                     u.deposits.forEach(d => {
@@ -1502,7 +1558,6 @@
                 }
             });
 
-            // Lọc nạp tiền theo thời gian & từ khóa
             let filteredDeposits = allDeposits.filter(d => {
                 let dDate = new Date(d.timestamp || Date.now());
                 let today = new Date();
@@ -1521,7 +1576,6 @@
                 return true;
             });
 
-            // Tính tổng tiền nạp lọc
             let filteredTotalAmount = filteredDeposits.reduce((sum, item) => sum + (item.amount || 0), 0);
             if(document.getElementById('txtFilteredDepositTotal')) {
                 document.getElementById('txtFilteredDepositTotal').textContent = filteredTotalAmount.toLocaleString() + 'đ';
@@ -1541,7 +1595,6 @@
                 `).join('');
             }
 
-            // Lọc đơn mua
             let filteredOrders = allOrders.filter(o => {
                 if (keywordOrd && !o.username.toLowerCase().includes(keywordOrd) && !o.id.toLowerCase().includes(keywordOrd) && !o.name.toLowerCase().includes(keywordOrd)) {
                     return false;
