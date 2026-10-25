@@ -295,7 +295,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1">Số lượng muốn mua:</label>
-                    <input type="number" id="inputQty" value="10" min="1" oninput="updateBuyTotal()" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="number" id="inputQty" value="1" min="1" oninput="updateBuyTotal()" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm font-bold outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between text-xs font-bold text-slate-600">
                     <span>Tổng thanh toán:</span>
@@ -1033,7 +1033,7 @@
             
             let rawList = activeProduct.rawAccs || [];
             if (rawList.length < qty) {
-                alert("⚠️ Số lượng acc LIVE trong kho KHÔNG đủ!");
+                alert("⚠️ Mất kết nối tới kho hàng!");
                 return;
             }
 
