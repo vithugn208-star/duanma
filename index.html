@@ -68,7 +68,7 @@
                         </div>
                     </div>
 
-                    <a href="https://t.me/naptienvhfb_bot" target="_blank" class="flex items-center gap-1 px-2.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all active:scale-95">
+                    <a href="https://t.me/cookieviavh_bot" target="_blank" class="flex items-center gap-1 px-2.5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all active:scale-95">
                         <i data-lucide="wallet" class="w-3.5 h-3.5"></i>
                         <span class="hidden xs:inline">Nạp Tiền Bot</span>
                     </a>
@@ -141,15 +141,15 @@
                 </div>
                 <div>
                     <h3 class="font-bold text-base sm:text-lg text-slate-800 mb-1">Nạp Tiền Tự Động Qua Telegram Bot</h3>
-                    <p class="text-xs text-slate-500 leading-relaxed">Để cộng tiền tự động siêu tốc qua PayOS, sếp vui lòng liên kết <b>Telegram ID</b> trên tài khoản web và nạp tiền trực tiếp qua Bot.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Để tránh gian lận và xử lý cộng tiền tự động siêu tốc qua PayOS, sếp vui lòng thực hiện nạp tiền trực tiếp qua Bot Telegram chính thức của shop.</p>
                 </div>
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-left text-xs space-y-2">
                     <p class="font-bold text-slate-700">📌 Các bước thực hiện:</p>
-                    <p>1. Vào Bot Telegram: <b class="text-blue-600">@naptienvhfb_bot</b> và bấm lệnh <b class="font-mono bg-white px-1 py-0.5 border rounded">/start</b> để lấy Telegram ID của sếp.</p>
-                    <p>2. Cập nhật Telegram ID đó vào phần thông tin tài khoản trên Web này để đồng bộ số dư.</p>
-                    <p>3. Chọn nạp tiền trên bot, quét mã QR PayOS và nhận tiền tự động sau 3 giây!</p>
+                    <p>1. Mở Telegram và tìm bot: <b class="text-blue-600">@cookieviavh_bot</b></p>
+                    <p>2. Gửi lệnh <b class="font-mono bg-white px-1.5 py-0.5 border rounded">/start</b> và chọn nút <b>Nạp Tiền Tự Động</b>.</p>
+                    <p>3. Nhập số tiền và quét mã QR PayOS. Hệ thống tự động cộng tiền sau 3 giây!</p>
                 </div>
-                <a href="https://t.me/naptienvhfb_bot" target="_blank" class="inline-flex items-center justify-center gap-2 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                <a href="https://t.me/cookieviavh_bot" target="_blank" class="inline-flex items-center justify-center gap-2 w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
                     <i data-lucide="external-link" class="w-4 h-4"></i> Mở Bot Telegram Nạp Tiền Ngay
                 </a>
             </div>
@@ -200,14 +200,14 @@
 
     <!-- ================= MODALS SECTION ================= -->
 
-    <!-- MODAL CẬP NHẬT THÔNG TIN & LIÊN KẾT TELEGRAM ID -->
+    <!-- MODAL CẬP NHẬT THÔNG TIN -->
     <div id="profileUpdateModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-5 border border-slate-100 text-center">
             <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-3">
                 <i data-lucide="user-check" class="w-6 h-6"></i>
             </div>
-            <h3 class="font-bold text-base text-slate-800 mb-1">Cập Nhật Thông Tin & Liên Kết Ví</h3>
-            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Vui lòng điền Telegram ID để đồng bộ số dư nạp tự động từ Bot về Web.</p>
+            <h3 class="font-bold text-base text-slate-800 mb-1">Cập Nhật Thông Tin Để Tiếp Tục</h3>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Vui lòng cung cấp Họ tên và SDT chính chủ để đối soát bảo hành và tra cứu giao dịch.</p>
             
             <div class="space-y-3 text-left">
                 <div>
@@ -218,13 +218,8 @@
                     <label class="block text-[11px] font-bold text-slate-600 mb-1">Số điện thoại (Zalo):</label>
                     <input type="tel" id="inputPhoneNumber" placeholder="Ví dụ: 0987654321" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
-                <div>
-                    <label class="block text-[11px] font-bold text-blue-600 mb-1">Telegram ID (Bắt buộc để đồng bộ ví):</label>
-                    <input type="text" id="inputTelegramId" placeholder="Ví dụ: 6965340589" class="w-full px-3.5 py-2.5 border border-blue-400 bg-blue-50/50 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
-                    <p class="text-[10px] text-slate-400 mt-1">Gửi /start cho @naptienvhfb_bot để xem ID của bạn.</p>
-                </div>
                 <button onclick="saveUserProfileInfo()" class="w-full mt-2 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
-                    Lưu Thông Tin & Đồng Bộ Ví
+                    Lưu Thông Tin & Tiếp Tục
                 </button>
             </div>
         </div>
@@ -419,12 +414,13 @@
                     </div>
                 </div>
 
-                <!-- GIAO DỊCH TOÀN HỆ THỐNG CHO ADMIN -->
+                <!-- GIAO DỊCH TOÀN HỆ THỐNG CHO ADMIN (Nạp tiền gần đây & Đơn hàng gần đây có tìm kiếm) -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <!-- 1. Lịch sử nạp tiền toàn hệ thống -->
                     <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
                         <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
                             <h4 class="font-bold text-xs text-slate-700 flex items-center gap-1.5">
-                                <i data-lucide="credit-card" class="w-4 h-4 text-emerald-600"></i> 💳 Nạp Tiền Gần Đây
+                                <i data-lucide="credit-card" class="w-4 h-4 text-emerald-600"></i> 💳 Nạp Tiền Gần Đây (Full Mem)
                             </h4>
                             <input type="text" id="adminSearchDeposit" oninput="filterAdminDeposits()" placeholder="🔍 Tìm mã nạp / user..." class="w-full sm:w-44 px-2.5 py-1.5 border rounded-lg text-xs font-bold bg-white">
                         </div>
@@ -443,10 +439,11 @@
                         </div>
                     </div>
 
+                    <!-- 2. Lịch sử mua hàng toàn hệ thống -->
                     <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
                         <div class="flex flex-col sm:flex-row items-center justify-between gap-2">
                             <h4 class="font-bold text-xs text-slate-700 flex items-center gap-1.5">
-                                <i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i> 🛒 Đơn Mua Gần Đây
+                                <i data-lucide="shopping-bag" class="w-4 h-4 text-blue-600"></i> 🛒 Đơn Mua Gần Đây (Full Mem)
                             </h4>
                             <input type="text" id="adminSearchOrder" oninput="filterAdminOrders()" placeholder="🔍 Tìm mã đơn / user..." class="w-full sm:w-44 px-2.5 py-1.5 border rounded-lg text-xs font-bold bg-white">
                         </div>
@@ -478,7 +475,7 @@
                                     <th class="p-2">Username</th>
                                     <th class="p-2 text-red-600">Pass</th>
                                     <th class="p-2">Họ & Tên</th>
-                                    <th class="p-2">Telegram ID</th>
+                                    <th class="p-2">SĐT</th>
                                     <th class="p-2">Ví</th>
                                     <th class="p-2 text-right">Thao tác</th>
                                 </tr>
@@ -544,7 +541,7 @@
 
         let products = [];
         let userDatabase = {};
-        let currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', realFullName: '', phone: '', telegramId: '', balance: 0, isAdmin: false, isBanned: false };
+        let currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', realFullName: '', phone: '', balance: 0, isAdmin: false, isBanned: false };
         let selectedOrderForView = null;
         let activeProduct = null;
         let captchaAns = 8;
@@ -556,7 +553,6 @@
                 fullName: ADMIN_USERNAME,
                 realFullName: 'Vũ Đặng Việt Hùng',
                 phone: '',
-                telegramId: '',
                 balance: 0,
                 isAdmin: true,
                 isBanned: false
@@ -593,7 +589,6 @@
                             fullName: ADMIN_USERNAME,
                             realFullName: 'Vũ Đặng Việt Hùng',
                             phone: '',
-                            telegramId: '',
                             balance: 0,
                             isAdmin: true,
                             isBanned: false
@@ -605,7 +600,6 @@
                             fullName: currentSavedU,
                             realFullName: found.realFullName || '',
                             phone: found.phone || '',
-                            telegramId: found.telegramId || '',
                             balance: found.balance || 0,
                             isAdmin: false,
                             isBanned: found.isBanned || false
@@ -714,7 +708,6 @@
                     fullName: ADMIN_USERNAME,
                     realFullName: 'Vũ Đặng Việt Hùng',
                     phone: '',
-                    telegramId: '',
                     balance: 0,
                     isAdmin: true,
                     isBanned: false
@@ -734,11 +727,12 @@
                 if (p !== reP) return alert("Mật khẩu nhập lại không trùng khớp!");
                 if (userDatabase[u]) return alert("Tên đăng nhập này đã tồn tại trên hệ thống!");
                 
+                alert(`🎉 ĐĂNG KÝ THÀNH CÔNG!\nTài khoản [ ${u} ] đã được tạo. Hệ thống sẽ tự động đăng nhập.`);
+
                 userDatabase[u] = { 
                     password: p, 
                     realFullName: '', 
                     phone: '', 
-                    telegramId: '',
                     balance: 0, 
                     isBanned: false, 
                     regTime: nowStr, 
@@ -761,6 +755,8 @@
                 if (!found) return alert("Tài khoản không tồn tại! Vui lòng kiểm tra lại hoặc bấm sang tab Đăng Ký.");
                 if (found.password !== p) return alert("Mật khẩu đăng nhập không chính xác!");
                 if (found.isBanned) return alert("Tài khoản này đã bị khóa truy cập!");
+                
+                alert(`✅ Đăng nhập thành công tài khoản: ${u}`);
             }
 
             let foundData = userDatabase[u];
@@ -769,7 +765,6 @@
                 fullName: u,
                 realFullName: foundData.realFullName || '',
                 phone: foundData.phone || '',
-                telegramId: foundData.telegramId || '',
                 balance: foundData.balance || 0,
                 isAdmin: false,
                 isBanned: foundData.isBanned || false
@@ -780,11 +775,9 @@
             renderUserHistory();
             closeModal('authModal');
             
-            // Yêu cầu cập nhật thông tin và Telegram ID nếu chưa có
-            if (!currentUser.phone || !currentUser.realFullName || !currentUser.telegramId) {
-                document.getElementById('inputRealFullName').value = currentUser.realFullName || '';
-                document.getElementById('inputPhoneNumber').value = currentUser.phone || '';
-                document.getElementById('inputTelegramId').value = currentUser.telegramId || '';
+            if (!currentUser.phone || !currentUser.realFullName) {
+                document.getElementById('inputRealFullName').value = '';
+                document.getElementById('inputPhoneNumber').value = '';
                 document.getElementById('profileUpdateModal').classList.remove('hidden');
             }
         }
@@ -797,7 +790,7 @@
                 btnAuth.textContent = "Đăng Xuất";
                 btnAuth.onclick = () => {
                     localStorage.removeItem('vh_logged_in');
-                    currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', realFullName: '', phone: '', telegramId: '', balance: 0, isAdmin: false, isBanned: false };
+                    currentUser = { username: 'khachhang', fullName: 'Khách Vãng Lai', realFullName: '', phone: '', balance: 0, isAdmin: false, isBanned: false };
                     updateUserHeader();
                     renderUserHistory();
                     btnAuth.textContent = "Đăng Nhập";
@@ -820,11 +813,10 @@
                 openAuthModal();
                 return false;
             }
-            if (!currentUser.phone || !currentUser.realFullName || !currentUser.telegramId) {
+            if (!currentUser.phone || !currentUser.realFullName) {
                 pendingAction = actionCallback;
                 document.getElementById('inputRealFullName').value = currentUser.realFullName || '';
                 document.getElementById('inputPhoneNumber').value = currentUser.phone || '';
-                document.getElementById('inputTelegramId').value = currentUser.telegramId || '';
                 document.getElementById('profileUpdateModal').classList.remove('hidden');
                 return false;
             }
@@ -834,27 +826,19 @@
         async function saveUserProfileInfo() {
             const name = document.getElementById('inputRealFullName').value.trim();
             const phone = document.getElementById('inputPhoneNumber').value.trim();
-            const telegramId = document.getElementById('inputTelegramId').value.trim();
 
-            if (!name || !phone || !telegramId) return alert("Vui lòng điền đầy đủ Họ tên, SĐT và Telegram ID!");
-            
+            if (!name || !phone) return alert("Vui lòng điền đầy đủ Họ tên và Số điện thoại!");
             currentUser.realFullName = name;
             currentUser.phone = phone;
-            currentUser.telegramId = telegramId;
 
             if (userDatabase[currentUser.username]) {
                 userDatabase[currentUser.username].realFullName = name;
                 userDatabase[currentUser.username].phone = phone;
-                userDatabase[currentUser.username].telegramId = telegramId;
-                await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), { 
-                    realFullName: name, 
-                    phone: phone, 
-                    telegramId: telegramId 
-                });
+                await window.FB.updateDoc(window.FB.doc(window.db, "users", currentUser.username), { realFullName: name, phone: phone });
             }
 
             closeModal('profileUpdateModal');
-            alert("✅ Đã cập nhật thông tin và liên kết Telegram ID thành công!");
+            alert("✅ Đã cập nhật thông tin thành công!");
             if (pendingAction) {
                 let act = pendingAction;
                 pendingAction = null;
@@ -980,6 +964,7 @@
 
         function renderUserHistory() {
             const body = document.getElementById('historyTableBody');
+            const depBody = document.getElementById('depositHistoryTableBody');
             if (currentUser.username === 'khachhang') {
                 body.innerHTML = `<tr><td colspan="6" class="p-5 text-center text-slate-400">Vui lòng đăng nhập để xem lịch sử mua hàng.</td></tr>`;
                 return;
@@ -1147,7 +1132,7 @@
                         <td class="p-2 font-bold">${uname}</td>
                         <td class="p-2 font-mono text-red-600">${u.password}</td>
                         <td class="p-2">${u.realFullName || 'Chưa nhập'}</td>
-                        <td class="p-2 font-mono text-blue-600 font-bold">${u.telegramId || 'Chưa liên kết'}</td>
+                        <td class="p-2 font-mono">${u.phone || 'Chưa nhập'}</td>
                         <td class="p-2 font-bold text-emerald-600">${(u.balance || 0).toLocaleString()}đ</td>
                         <td class="p-2 text-right"><button onclick="adminLockUser('${uname}')" class="px-2 py-0.5 bg-red-600 text-white rounded text-[9px]">Khóa</button></td>
                     </tr>
