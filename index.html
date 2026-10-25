@@ -212,15 +212,15 @@
             <div class="space-y-3 text-left">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-600 mb-1">Họ và Tên:</label>
-                    <input type="text" id="inputRealFullName" placeholder="Ví dụ: Nguyễn Văn A" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="text" id="inputRealFullName" placeholder="Ví dụ: Đặng Văn A" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-slate-600 mb-1">Số điện thoại (Zalo):</label>
-                    <input type="tel" id="inputPhoneNumber" placeholder="Ví dụ: 0987654321" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="tel" id="inputPhoneNumber" placeholder="Ví dụ: 09xxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
                     <label class="block text-[11px] font-bold text-blue-600 mb-1">Telegram ID (Bắt buộc để đồng bộ ví):</label>
-                    <input type="text" id="inputTelegramId" placeholder="Ví dụ: 6965340589" class="w-full px-3.5 py-2.5 border border-blue-400 bg-blue-50/50 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="text" id="inputTelegramId" placeholder="Ví dụ: 69xxxxxxxx" class="w-full px-3.5 py-2.5 border border-blue-400 bg-blue-50/50 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                     <p class="text-[10px] text-slate-400 mt-1">Gửi /start cho <a href="https://t.me/naptienvhfb_bot" target="_blank" class="text-blue-600 hover:underline font-bold">@naptienvhfb_bot</a> để xem ID của bạn.</p>
                 </div>
                 <button onclick="saveUserProfileInfo()" class="w-full mt-2 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
@@ -1033,11 +1033,11 @@
             
             let rawList = activeProduct.rawAccs || [];
             if (rawList.length < qty) {
-                alert("⚠️ Mất kết nối tới kho hàng!");
+                alert("⚠️ Số lượng acc LIVE trong kho KHÔNG đủ!");
                 return;
             }
 
-            alert("🔄 Hệ thống đang check live tự động (tối đa 100 luồng) để lọc acc sống trước khi gửi...");
+            alert("🔄 Hệ thống đang check live tự động để lọc acc sống trước khi gửi...");
 
             let shuffledAccs = shuffleArray(rawList);
             let liveAccsToSend = [];
