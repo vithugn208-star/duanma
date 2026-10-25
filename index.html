@@ -191,7 +191,7 @@
 
     <!-- FOOTER -->
     <footer class="bg-white border-t border-slate-200 py-5 text-center text-[11px] text-slate-500 space-y-1">
-        <p class="font-bold text-slate-700">© 2026 VHUNGFB.COM - Hệ Thống Cung Cấp Nguyên Liệu Facebook Tự Động 24/7</p>
+        <p class="font-bold text-slate-700">© 2026 VHUNGFB - Hệ Thống Cung Cấp Nguyên Liệu Facebook Tự Động 24/7</p>
         <p>
             <button onclick="openTermsModal()" class="text-blue-600 hover:underline font-bold">Điều Khoản Dịch Vụ</button> | 
             Telegram: <a href="https://t.me/rrpcmad" target="_blank" class="text-blue-600 hover:underline">@rrpcmad</a>
@@ -230,14 +230,14 @@
         </div>
     </div>
 
-    <!-- MODAL XEM ACC -->
-    <div id="viewAccModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-5 border border-slate-100 max-h-[85vh] overflow-y-auto">
+    <!-- MODAL XEM ACC (LỚP z-60 CAO HƠN ĐỂ ĐÈ LÊN ADMIN PANEL) -->
+    <div id="viewAccModal" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-[60] flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-5 border border-slate-200 max-h-[85vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
                 <h3 class="font-bold text-sm sm:text-base text-slate-800 flex items-center gap-2">
                     <i data-lucide="file-code" class="w-4 h-4 text-blue-600"></i> Xem & Tải Dữ Liệu Acc
                 </h3>
-                <button onclick="closeModal('viewAccModal')" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <button onclick="closeViewAccModal()" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
 
             <div class="bg-blue-50/70 p-3.5 rounded-xl border border-blue-200 mb-3 space-y-2.5">
@@ -1187,6 +1187,13 @@
             if (!selectedOrderForView) return;
             updateFormattedPreview();
             document.getElementById('viewAccModal').classList.remove('hidden');
+        }
+
+        function closeViewAccModal() {
+            document.getElementById('viewAccModal').classList.add('hidden');
+            if (currentUser.isAdmin) {
+                document.getElementById('adminModal').classList.remove('hidden');
+            }
         }
 
         function getFormattedAccContent() {
