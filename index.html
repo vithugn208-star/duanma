@@ -207,9 +207,13 @@
                 <i data-lucide="user-check" class="w-6 h-6"></i>
             </div>
             <h3 class="font-bold text-base text-slate-800 mb-1">Cập Nhật Thông Tin & Liên Kết Ví</h3>
-            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Vui lòng điền Telegram ID để đồng bộ số dư nạp tự động từ Bot về Web.</p>
+            <p class="text-xs text-slate-500 mb-4 leading-relaxed">Vui lòng điền đúng Username web và Telegram ID để Bot nạp tự động chính xác tuyệt đối.</p>
             
             <div class="space-y-3 text-left">
+                <div>
+                    <label class="block text-[11px] font-bold text-blue-600 mb-1">Username trên Web (Bắt buộc):</label>
+                    <input type="text" id="inputWebUsername" disabled class="w-full px-3.5 py-2.5 border border-blue-400 bg-blue-50/50 rounded-xl text-xs font-bold outline-none text-slate-600">
+                </div>
                 <div>
                     <label class="block text-[11px] font-bold text-slate-600 mb-1">Họ và Tên:</label>
                     <input type="text" id="inputRealFullName" placeholder="Ví dụ: Đặng Văn A" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
@@ -219,12 +223,12 @@
                     <input type="tel" id="inputPhoneNumber" placeholder="Ví dụ: 09xxxxxxx" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-blue-600 mb-1">Telegram ID (Bắt buộc để đồng bộ ví):</label>
+                    <label class="block text-[11px] font-bold text-blue-600 mb-1">Telegram ID (Lấy từ Bot):</label>
                     <input type="text" id="inputTelegramId" placeholder="Ví dụ: 69xxxxxxxx" class="w-full px-3.5 py-2.5 border border-blue-400 bg-blue-50/50 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-blue-500">
                     <p class="text-[10px] text-slate-400 mt-1">Gửi /start cho <a href="https://t.me/naptienvhfb_bot" target="_blank" class="text-blue-600 hover:underline font-bold">@naptienvhfb_bot</a> để xem ID của bạn.</p>
                 </div>
                 <button onclick="saveUserProfileInfo()" class="w-full mt-2 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition-all">
-                    Lưu Thông Tin & Đồng Bộ Ví
+                    Lưu Thông Tin & Liên Kết
                 </button>
             </div>
         </div>
@@ -877,6 +881,7 @@
             closeModal('authModal');
             
             if (!currentUser.phone || !currentUser.realFullName || !currentUser.telegramId) {
+                document.getElementById('inputWebUsername').value = currentUser.username;
                 document.getElementById('inputRealFullName').value = currentUser.realFullName || '';
                 document.getElementById('inputPhoneNumber').value = currentUser.phone || '';
                 document.getElementById('inputTelegramId').value = currentUser.telegramId || '';
@@ -917,6 +922,7 @@
             }
             if (!currentUser.phone || !currentUser.realFullName || !currentUser.telegramId) {
                 pendingAction = actionCallback;
+                document.getElementById('inputWebUsername').value = currentUser.username;
                 document.getElementById('inputRealFullName').value = currentUser.realFullName || '';
                 document.getElementById('inputPhoneNumber').value = currentUser.phone || '';
                 document.getElementById('inputTelegramId').value = currentUser.telegramId || '';
@@ -932,7 +938,19 @@
             const telegramId = document.getElementById('inputTelegramId').value.trim();
 
             if (!name || !phone || !telegramId) return alert("Vui lòng điền đầy đủ Họ tên, SĐT và Telegram ID!");
-            
+
+            // KIỂM TRA TRÙNG LẶP TELEGRAM ID (CHỈ CHẶN NẾU TÀI KHOẢN CŨ ĐANG HOẠT ĐỘNG, BỎ QUA NẾU ĐÃ BỊ KHÓA)
+            for (let uname in userDatabase) {
+                if (uname !== currentUser.username) {
+                    let otherUser = userDatabase[uname];
+                    // Nếu tài khoản cũ đang dùng chung ID này VÀ KHÔNG BỊ KHÓA (!isBanned) thì mới chặn
+                    if (otherUser.telegramId && otherUser.telegramId.toString() === telegramId.toString() && !otherUser.isBanned) {
+                        alert("❌ Telegram ID này đã được liên kết với tài khoản khác! Vui lòng liên hệ admin @tao vào cho họ nhắn t fix cho họ.");
+                        return;
+                    }
+                }
+            }
+
             currentUser.realFullName = name;
             currentUser.phone = phone;
             currentUser.telegramId = telegramId;
@@ -949,7 +967,7 @@
             }
 
             closeModal('profileUpdateModal');
-            alert("✅ Đã cập nhật thông tin và liên kết Telegram ID thành công!");
+            alert("✅ Đã liên kết tài khoản web với Telegram ID thành công!");
             if (pendingAction) {
                 let act = pendingAction;
                 pendingAction = null;
